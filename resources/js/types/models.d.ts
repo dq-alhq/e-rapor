@@ -195,20 +195,23 @@ declare global {
       updated_at: string | null
       // relations
       anggota_kelas: AnggotaKela[]
-      mapels: Mapel[]
-      gurus: Guru[]
+      mapel: Mapel[]
+      guru: Guru[]
       tapel: Tapel
       wali: Guru
+      siswa: Siswa[]
       // counts
       anggota_kelas_count: number
-      mapels_count: number
-      gurus_count: number
+      mapel_count: number
+      guru_count: number
+      siswa_count: number
       // exists
       anggota_kelas_exists: boolean
-      mapels_exists: boolean
-      gurus_exists: boolean
+      mapel_exists: boolean
+      guru_exists: boolean
       tapel_exists: boolean
       wali_exists: boolean
+      siswa_exists: boolean
     }
 
     export interface KelompokMapel {
@@ -236,14 +239,14 @@ declare global {
       updated_at: string | null
       // relations
       kelas: Kela[]
-      gurus: Guru[]
+      guru: Guru[]
       kelompok_mapel: KelompokMapel
       // counts
       kelas_count: number
-      gurus_count: number
+      guru_count: number
       // exists
       kelas_exists: boolean
-      gurus_exists: boolean
+      guru_exists: boolean
       kelompok_mapel_exists: boolean
     }
 
@@ -282,14 +285,14 @@ declare global {
       created_at: string | null
       updated_at: string | null
       // relations
-      penilaians: Penilaian[]
+      penilaian: Penilaian[]
       kelas: Kela
       mapel: Mapel
       guru: Guru
       // counts
-      penilaians_count: number
+      penilaian_count: number
       // exists
-      penilaians_exists: boolean
+      penilaian_exists: boolean
       kelas_exists: boolean
       mapel_exists: boolean
       guru_exists: boolean
@@ -322,14 +325,11 @@ declare global {
       created_at: string | null
       updated_at: string | null
       // relations
-      anggota_proyeks: AnggotaProyek[]
       tapel: Tapel
       siswa: Siswa[]
       // counts
-      anggota_proyeks_count: number
       siswa_count: number
       // exists
-      anggota_proyeks_exists: boolean
       tapel_exists: boolean
       siswa_exists: boolean
     }
@@ -388,18 +388,30 @@ declare global {
       created_at: string | null
       updated_at: string | null
       // relations
+      user: User
       anggota_kelas: AnggotaKela[]
       kelas: Kela[]
-      user: User
       wilayah: Wilayah
+      ekskul: Ekskul[]
+      proyek: Proyek[]
+      hasil_penilaian: HasilPenilaian[]
+      catatan_wali_kelas: CatatanWaliKela[]
       // counts
       anggota_kelas_count: number
       kelas_count: number
+      ekskul_count: number
+      proyek_count: number
+      hasil_penilaian_count: number
+      catatan_wali_kelas_count: number
       // exists
+      user_exists: boolean
       anggota_kelas_exists: boolean
       kelas_exists: boolean
-      user_exists: boolean
       wilayah_exists: boolean
+      ekskul_exists: boolean
+      proyek_exists: boolean
+      hasil_penilaian_exists: boolean
+      catatan_wali_kelas_exists: boolean
     }
 
     export interface Subelemen {
@@ -447,10 +459,16 @@ declare global {
       created_at: string | null
       updated_at: string | null
       // relations
+      siswa: Siswa
+      guru: Guru
+      operator: Operator
       notifications: DatabaseNotification[]
       // counts
       notifications_count: number
       // exists
+      siswa_exists: boolean
+      guru_exists: boolean
+      operator_exists: boolean
       notifications_exists: boolean
     }
 

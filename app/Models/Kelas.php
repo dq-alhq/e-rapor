@@ -43,22 +43,14 @@ class Kelas extends Model
         return $this->hasMany(AnggotaKelas::class);
     }
 
-    public function mapels(): BelongsToMany
+    public function mapel(): BelongsToMany
     {
-        return $this->belongsToMany(Mapel::class)
-            ->using(Pembelajaran::class)
-            ->as('pembelajaran')
-            ->withPivot('id', 'kelas_id', 'mapel_id', 'guru_id', 'kkm')
-            ->withTimestamps();
+        return $this->belongsToMany(Mapel::class, 'pembelajarans', 'kelas_id', 'mapel_id');
     }
 
-    public function gurus(): BelongsToMany
+    public function guru(): BelongsToMany
     {
-        return $this->belongsToMany(Guru::class)
-            ->using(Pembelajaran::class)
-            ->as('pembelajaran')
-            ->withPivot('id', 'kelas_id', 'mapel_id', 'guru_id', 'kkm')
-            ->withTimestamps();
+        return $this->belongsToMany(Guru::class, 'pembelajarans', 'kelas_id', 'guru_id');
     }
 
     public function tapel(): BelongsTo
@@ -69,5 +61,10 @@ class Kelas extends Model
     public function wali(): BelongsTo
     {
         return $this->belongsTo(Guru::class);
+    }
+
+    public function siswa(): BelongsToMany
+    {
+        return $this->belongsToMany(Siswa::class, 'anggota_kelas', 'kelas_id', 'siswa_id');
     }
 }

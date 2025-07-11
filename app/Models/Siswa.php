@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 
 class Siswa extends Model
 {
@@ -57,6 +58,11 @@ class Siswa extends Model
         ];
     }
 
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
+
     public function anggotaKelas(): HasMany
     {
         return $this->hasMany(AnggotaKelas::class);
@@ -64,16 +70,32 @@ class Siswa extends Model
 
     public function kelas(): BelongsToMany
     {
-        return $this->belongsToMany(Kelas::class, 'anggota_kelas', 'siswa_id', 'kelas_id');
-    }
-
-    public function user(): BelongsTo
-    {
-        return $this->belongsTo(User::class);
+        return $this->belongsToMany(Kelas::class, 'anggota_kelas', 'siswa_id', 'kelas_id')
+            ->withTimestamps();
     }
 
     public function wilayah(): BelongsTo
     {
         return $this->belongsTo(Wilayah::class);
+    }
+
+    public function ekskul(): HasManyThrough
+    {
+        return $this->hasManyThrough(Ekskul::class, AnggotaKelas::class);
+    }
+
+    public function proyek(): HasManyThrough
+    {
+        return $this->hasManyThrough(Proyek::class, AnggotaKelas::class);
+    }
+
+    public function hasilPenilaian(): HasManyThrough
+    {
+        return $this->hasManyThrough(HasilPenilaian::class, AnggotaKelas::class);
+    }
+
+    public function catatanWaliKelas(): HasMany
+    {
+        return $this->hasMany(CatatanWaliKelas::class);
     }
 }

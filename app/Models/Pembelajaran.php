@@ -38,7 +38,7 @@ class Pembelajaran extends Model
         ];
     }
 
-    public function penilaians(): HasMany
+    public function penilaian(): HasMany
     {
         return $this->hasMany(Penilaian::class);
     }

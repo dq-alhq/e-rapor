@@ -44,13 +44,9 @@ class Mapel extends Model
             ->withTimestamps();
     }
 
-    public function gurus(): BelongsToMany
+    public function guru(): BelongsToMany
     {
-        return $this->belongsToMany(Guru::class)
-            ->using(Pembelajaran::class)
-            ->as('pembelajaran')
-            ->withPivot('id', 'kelas_id', 'mapel_id', 'guru_id', 'kkm')
-            ->withTimestamps();
+        return $this->belongsToMany(Guru::class, 'pembelajarans', 'mapel_id', 'guru_id');
     }
 
     public function kelompokMapel(): BelongsTo

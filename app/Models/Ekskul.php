@@ -42,6 +42,6 @@ class Ekskul extends Model
 
     public function siswa(): BelongsToMany
     {
-        return $this->belongsToMany(Siswa::class, 'anggota_ekskuls', 'ekskul_id', 'siswa_id');
+        return $this->belongsToMany(Siswa::class, 'anggota_ekskuls', 'ekskul_id', 'anggota_kelas_id');
     }
 }
