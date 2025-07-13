@@ -2,15 +2,12 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class AnggotaKelas extends Model
 {
-    use HasFactory;
-
     /**
      * The attributes that are mass assignable.
      *
@@ -50,26 +47,6 @@ class AnggotaKelas extends Model
         ];
     }
 
-    public function hasilPenilaians(): HasMany
-    {
-        return $this->hasMany(HasilPenilaian::class);
-    }
-
-    public function anggotaEkskuls(): HasMany
-    {
-        return $this->hasMany(AnggotaEkskul::class);
-    }
-
-    public function anggotaProyeks(): HasMany
-    {
-        return $this->hasMany(AnggotaProyek::class);
-    }
-
-    public function catatanWaliKelas(): HasMany
-    {
-        return $this->hasMany(CatatanWaliKelas::class);
-    }
-
     public function siswa(): BelongsTo
     {
         return $this->belongsTo(Siswa::class);
@@ -79,4 +56,26 @@ class AnggotaKelas extends Model
     {
         return $this->belongsTo(\App\Models\Kelas::class);
     }
+
+    public function hasilPenilaian(): HasMany
+    {
+        return $this->hasMany(HasilPenilaian::class);
+    }
+
+    public function anggotaEkskul(): HasMany
+    {
+        return $this->hasMany(AnggotaEkskul::class);
+    }
+
+    public function anggotaProyek(): HasMany
+    {
+        return $this->hasMany(AnggotaProyek::class);
+    }
+
+    public function catatanWaliKelas(): HasMany
+    {
+        return $this->hasMany(CatatanWaliKelas::class);
+    }
+
+
 }

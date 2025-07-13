@@ -34,7 +34,7 @@ class Elemen extends Model
         ];
     }
 
-    public function subelemens(): HasMany
+    public function subelemen(): HasMany
     {
         return $this->hasMany(Subelemen::class);
     }

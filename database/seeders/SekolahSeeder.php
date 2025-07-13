@@ -4,7 +4,6 @@ namespace Database\Seeders;
 
 use App\Models\Guru;
 use App\Models\Sekolah;
-use App\Models\User;
 use Illuminate\Database\Seeder;
 
 class SekolahSeeder extends Seeder
@@ -27,12 +26,7 @@ class SekolahSeeder extends Seeder
             'telepon' => '031-944761',
             'email' => 'spemtalum@gmail.com',
             'kepsek_id' => Guru::factory()->create([
-                'nama' => $nama = 'Moh. Arif Romadloni, S.Pd.I.',
-                'user_id' => User::factory()->create([
-                    'name' => $nama,
-                    'username' => $username = str($nama)->slug('.'),
-                    'email' => "{$username}@gmail.com",
-                ]),
+                'nama' => 'Moh. Arif Romadloni, S.Pd.I.',
                 'jk' => 'l',
                 'nuptk' => '1842760663200032',
                 'nik' => '3525121005820001',

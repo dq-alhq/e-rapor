@@ -1,86 +1,50 @@
-import { type ReactNode, useEffect, useState } from "react"
+import { type ReactNode, useEffect, useState } from 'react';
 
-import AppLogo from "@/components/app-logo"
-import AppearanceToggleDropdown from "@/components/appearance-dropdown"
-import { Breadcrumbs } from "@/components/breadcrumbs"
-import { NavUser } from "@/components/nav-user"
-import { Link, Sidebar, SidebarInset, SidebarNav } from "@/components/ui"
-import type { BreadcrumbItem, NavItem } from "@/types"
-import { IconBookOpen, IconFolder, IconLayoutGrid } from "hq-icons"
-
-const mainNavItems: NavItem[] = [
-    {
-        title: "Dashboard",
-        href: "/dashboard",
-        icon: IconLayoutGrid,
-    },
-]
-
-const footerNavItems: NavItem[] = [
-    {
-        title: "Repository",
-        href: "https://github.com/laravel/react-starter-kit",
-        icon: <IconFolder />,
-    },
-    {
-        title: "Documentation",
-        href: "https://laravel.com/docs/starter-kits",
-        icon: <IconBookOpen />,
-    },
-]
+import AppLogo from '@/components/app-logo';
+import AppearanceToggleDropdown from '@/components/appearance-dropdown';
+import { Breadcrumbs } from '@/components/breadcrumbs';
+import { MenuEkskul } from '@/components/menus/menu-ekskul';
+import { MenuGuru } from '@/components/menus/menu-guru';
+import { MenuKepsek } from '@/components/menus/menu-kepsek';
+import { MenuProyek } from '@/components/menus/menu-proyek';
+import { MenuSiswa } from '@/components/menus/menu-siswa';
+import { MenuWaliKelas } from '@/components/menus/menu-wali-kelas';
+import { NavUser } from '@/components/nav-user';
+import { Link, Sidebar, SidebarInset, SidebarNav } from '@/components/ui';
+import type { BreadcrumbItem, SharedData } from '@/types';
+import { usePage } from '@inertiajs/react';
 
 interface AppSidebarProps {
-    breadcrumbs?: BreadcrumbItem[]
-    variant: "inset" | "float" | "default"
-    children: ReactNode
+    breadcrumbs?: BreadcrumbItem[];
+    variant: 'inset' | 'float' | 'default';
+    children: ReactNode;
 }
 
-export function AppSidebar({
-    variant,
-    children,
-    breadcrumbs,
-}: { variant: "inset" | "float" | "default"; children: React.ReactNode; breadcrumbs?: any }) {
-    const pathname = window.location.pathname
-    const [open, setOpen] = useState<boolean>(false)
+export function AppSidebar({ variant, children, breadcrumbs }: AppSidebarProps) {
+    const pathname = usePage<SharedData>().props.ziggy.location;
+    const [open, setOpen] = useState<boolean>(false);
+
+    const { user } = usePage<SharedData>().props.auth;
 
     useEffect(() => {
-        setOpen(false)
-    }, [pathname])
+        setOpen(false);
+    }, [pathname]);
 
     return (
         <>
-            <Sidebar
-                collapsible="dock"
-                variant={variant}
-                isMobileOpen={open}
-                onMobileOpenChange={setOpen}
-            >
+            <Sidebar collapsible="dock" variant={variant} isMobileOpen={open} onMobileOpenChange={setOpen}>
                 <Sidebar.Header>
                     <AppLogo />
-                    <Sidebar.Label className="text-[#ee2e03] text-sm">Laravel</Sidebar.Label>
+                    <Sidebar.Label className="text-sm text-[#ee2e03]">Laravel</Sidebar.Label>
                 </Sidebar.Header>
 
-                <Sidebar.Content className="flex-1">
-                    <Sidebar.Section title="Platform">
-                        {mainNavItems.map((item) => (
-                            <Sidebar.Item
-                                key={item.title}
-                                href={item.href}
-                                isCurrent={pathname === item.href}
-                            >
-                                {item.icon && <item.icon />}
-                                <Sidebar.Label>{item.title}</Sidebar.Label>
-                            </Sidebar.Item>
-                        ))}
-                    </Sidebar.Section>
-                    <Sidebar.Section className="mt-auto">
-                        {footerNavItems.map((item) => (
-                            <Sidebar.Item key={item.title} href={item.href}>
-                                {item.icon}
-                                <Sidebar.Label>{item.title}</Sidebar.Label>
-                            </Sidebar.Item>
-                        ))}
-                    </Sidebar.Section>
+                <Sidebar.Content className="no-scrollbar max-h-[85vh] flex-1 overflow-y-auto">
+                    {(user.roles?.includes('Kepala Sekolah') || user.roles?.includes('Operator')) && <MenuKepsek pathname={pathname} />}
+                    {user.roles?.includes('Guru') && <MenuGuru pathname={pathname} />}
+                    {user.roles?.includes('Wali Kelas') && <MenuWaliKelas pathname={pathname} />}
+                    {user.roles?.includes('Pembina Ekskul') && <MenuEkskul pathname={pathname} />}
+                    {user.roles?.includes('Koordinator Proyek') && <MenuProyek pathname={pathname} />}
+                    {user.roles?.includes('Siswa') && <MenuSiswa pathname={pathname} />}
                 </Sidebar.Content>
 
                 <Sidebar.Footer>
@@ -95,7 +59,7 @@ export function AppSidebar({
                         <AppLogo className="size-6" />
                     </Link>
                     <div className="hidden md:flex">
-                        <Breadcrumbs breadcrumbs={breadcrumbs} />
+                        <Breadcrumbs breadcrumbs={breadcrumbs || []} />
                     </div>
                     <div className="ml-auto">
                         <AppearanceToggleDropdown />
@@ -105,5 +69,5 @@ export function AppSidebar({
                 {children}
             </SidebarInset>
         </>
-    )
+    );
 }

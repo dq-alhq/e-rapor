@@ -2,14 +2,11 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class KelompokMapel extends Model
 {
-    use HasFactory;
-
     /**
      * The attributes that are mass assignable.
      *
@@ -32,7 +29,7 @@ class KelompokMapel extends Model
         ];
     }
 
-    public function mapels(): HasMany
+    public function mapel(): HasMany
     {
         return $this->hasMany(Mapel::class);
     }

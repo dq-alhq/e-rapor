@@ -38,4 +38,4 @@ const breadcrumbs: BreadcrumbItem[] = [
     },
 ];
 
-Dashboard.layout = (page: React.ReactNode) => <AppLayout breadcrumbs={breadcrumbs} children={page} layout="sidebar" variant="inset" />;
+Dashboard.layout = (page: React.ReactNode) => <AppLayout breadcrumbs={breadcrumbs} children={page} />;

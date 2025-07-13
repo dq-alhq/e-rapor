@@ -2,10 +2,13 @@
 
 namespace App\Models;
 
+use App\Observers\OperatorObserver;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
+#[ObservedBy(OperatorObserver::class)]
 class Operator extends Model
 {
     use HasFactory;
@@ -52,5 +55,10 @@ class Operator extends Model
     public function wilayah(): BelongsTo
     {
         return $this->belongsTo(Wilayah::class);
+    }
+
+    public function alamat(): string
+    {
+        return $this->alamat . ', ' . $this->wilayah->nama;
     }
 }

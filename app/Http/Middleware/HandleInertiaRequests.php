@@ -3,6 +3,7 @@
 namespace App\Http\Middleware;
 
 use App\Http\Resources\AuthUserResource;
+use App\Models\Sekolah;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 use Tighten\Ziggy\Ziggy;
@@ -39,15 +40,16 @@ class HandleInertiaRequests extends Middleware
     {
         return [
             ...parent::share($request),
-            'sekolah' => fn() => \App\Models\Sekolah::query()->with(['wilayah', 'kepsek'])->first(),
+            'sekolah' => fn() => Sekolah::query()->with(['wilayah', 'kepsek'])->first(),
             'auth' => [
                 'user' => $request->user() ? AuthUserResource::make($request->user()) : null,
             ],
             'ziggy' => fn(): array => [
                 ...(new Ziggy)->toArray(),
                 'location' => $request->url(),
+                'prev_url' => $request->headers->get('referer') == $request->url() ? null : $request->headers->get('referer'),
             ],
-            'flash' => fn() => [
+            'toast' => fn() => [
                 'message' => $request->session()->get('message'),
                 'type' => $request->session()->get('type') ?? 'success',
             ],

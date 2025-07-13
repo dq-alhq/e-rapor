@@ -3,7 +3,6 @@
 namespace Database\Seeders;
 
 use App\Models\Operator;
-use App\Models\User;
 use Illuminate\Database\Seeder;
 
 class OperatorSeeder extends Seeder
@@ -14,12 +13,7 @@ class OperatorSeeder extends Seeder
     public function run(): void
     {
         Operator::factory()->create([
-            'nama' => $nama = 'Moh. Arif Firdian, S.Pd.',
-            'user_id' => User::factory()->create([
-                'name' => $nama,
-                'username' => $username = str($nama)->slug('.'),
-                'email' => "{$username}@gmail.com",
-            ])->id,
+            'nama' => 'Moh. Arif Firdian, S.Pd.',
             'jk' => 'l',
             'nik' => '3525120303010001',
             'tempat_lahir' => 'Gresik',

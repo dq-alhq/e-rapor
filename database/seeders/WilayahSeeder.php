@@ -6,7 +6,6 @@ use App\Models\Province;
 use App\Models\Regency;
 use App\Models\Village;
 use App\Models\Wilayah;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class WilayahSeeder extends Seeder

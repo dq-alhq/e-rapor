@@ -27,7 +27,7 @@ class ProfileController extends Controller
     /**
      * Update the user's profile settings.
      */
-    public function update(ProfileUpdateRequest $request): RedirectResponse
+    public function update(ProfileUpdateRequest $request)
     {
         $request->user()->fill($request->validated());
 
@@ -35,9 +35,26 @@ class ProfileController extends Controller
             $request->user()->email_verified_at = null;
         }
 
+        if ($request->user()->isSiswa()) {
+            $request->user()->siswa()->update([
+                'nama' => $request->validated('name'),
+            ]);
+        }
+        if ($request->user()->isGuru() || $request->user()->isKepsek()) {
+            $request->user()->guru()->update([
+                'nama' => $request->validated('name'),
+            ]);
+        }
+        if ($request->user()->isOperator()) {
+            $request->user()->operator()->update([
+                'nama' => $request->validated('name'),
+            ]);
+        }
+
         $request->user()->save();
 
-        return to_route('profile.edit');
+        toast('Profil berhasil diperbarui.');
+        return back();
     }
 
     /**

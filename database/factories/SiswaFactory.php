@@ -2,12 +2,11 @@
 
 namespace Database\Factories;
 
-use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Str;
 use App\Models\Siswa;
 use App\Models\User;
 use App\Models\Village;
 use App\Models\Wilayah;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
 class SiswaFactory extends Factory
 {
@@ -34,15 +33,16 @@ class SiswaFactory extends Factory
 
         return [
             'jk' => $gender = fake()->randomElement(["l", "p"]),
-            'nama' => $nama = fake()->name($gender == 'l' ? 'male' : 'female'),
+            'nama' => $nama = fake()->unique()->name($gender == 'l' ? 'male' : 'female'),
+            'nisn' => $nisn = "00" . fake()->unique()->randomNumber(8),
             'user_id' => User::factory()->create([
                 'name' => $nama,
-                'username' => $username = str($nama)->slug('.'),
+                // 'username' => $username = str($nama)->slug('.'),
+                'username' => $username = $nisn,
                 'email' => "{$username}@gmail.com",
             ]),
             'nis' => fake()->unique()->randomNumber(5),
-            'nisn' => "00" . fake()->unique()->randomNumber(8),
-            'nik' => "352512" . fake()->randomNumber(6, true) . "0001",
+            'nik' => fake()->nik($gender == "l" ? "male" : "female"),
             'tempat_lahir' => fake()->city(),
             'tanggal_lahir' => fake()->date('Y-m-d', '2010-01-01'),
             'telepon' => fake()->phoneNumber(),

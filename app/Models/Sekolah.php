@@ -53,4 +53,9 @@ class Sekolah extends Model
     {
         return $this->belongsTo(Guru::class);
     }
+
+    public function alamat(): string
+    {
+        return $this->alamat . ', ' . $this->wilayah->nama;
+    }
 }

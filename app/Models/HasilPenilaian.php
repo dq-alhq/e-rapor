@@ -2,14 +2,11 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class HasilPenilaian extends Model
 {
-    use HasFactory;
-
     /**
      * The attributes that are mass assignable.
      *
@@ -36,9 +33,9 @@ class HasilPenilaian extends Model
         ];
     }
 
-    public function anggotaKelas(): BelongsTo
+    public function siswa(): BelongsTo
     {
-        return $this->belongsTo(\App\Models\AnggotaKelas::class);
+        return $this->belongsTo(AnggotaKelas::class);
     }
 
     public function penilaian(): BelongsTo

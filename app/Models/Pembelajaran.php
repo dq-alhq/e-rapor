@@ -2,15 +2,12 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Pembelajaran extends Model
 {
-    use HasFactory;
-
     /**
      * The attributes that are mass assignable.
      *
@@ -45,7 +42,7 @@ class Pembelajaran extends Model
 
     public function kelas(): BelongsTo
     {
-        return $this->belongsTo(\App\Models\Kelas::class);
+        return $this->belongsTo(Kelas::class);
     }
 
     public function mapel(): BelongsTo

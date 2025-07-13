@@ -20,6 +20,7 @@ class Tapel extends Model
         'semester',
         'tempat_rapor',
         'tanggal_rapor',
+        'aktif',
     ];
 
     /**
@@ -32,7 +33,13 @@ class Tapel extends Model
         return [
             'id' => 'integer',
             'tanggal_rapor' => 'date',
+            'aktif' => 'boolean',
         ];
+    }
+
+    public function isAktif(): bool
+    {
+        return $this->aktif;
     }
 
     public function kelas(): HasMany
@@ -40,7 +47,7 @@ class Tapel extends Model
         return $this->hasMany(Kelas::class);
     }
 
-    public function proyeks(): HasMany
+    public function proyek(): HasMany
     {
         return $this->hasMany(Proyek::class);
     }

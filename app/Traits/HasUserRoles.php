@@ -5,13 +5,14 @@ namespace App\Traits;
 use App\Models\Kelas;
 use App\Models\Mapel;
 use App\Models\Sekolah;
+use App\Models\User;
 
-/* @mixin \App\Models\User */
+/* @mixin User */
 trait HasUserRoles
 {
     public function isKepsek(): bool
     {
-        return $this->id == Sekolah::query()->first()->kepsek->user_id;
+        return $this->id === Sekolah::query()->first()->kepsek->user_id;
     }
 
     public function isOperator(): bool
@@ -52,5 +53,15 @@ trait HasUserRoles
     public function isSiswaKelas(Kelas $kelas): bool
     {
         return $this->id == $kelas->siswa()->first()->id;
+    }
+
+    public function getRoles(): array
+    {
+        $roles = [];
+        if ($this->isKepsek()) $roles[] = "Kepala Sekolah";
+        if ($this->isOperator()) $roles[] = "Operator";
+        if ($this->isGuru()) $roles[] = "Guru";
+        if ($this->isSiswa()) $roles[] = "Siswa";
+        return $roles;
     }
 }

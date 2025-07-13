@@ -1,9 +1,9 @@
-import type { ComponentProps } from 'react'
+import type { ComponentProps } from 'react';
 
-import type { ButtonProps, DialogProps, DialogTriggerProps, ModalOverlayProps } from 'react-aria-components'
-import { Button, Modal, DialogTrigger as SheetTrigger } from 'react-aria-components'
+import type { ButtonProps, DialogProps, DialogTriggerProps, ModalOverlayProps } from 'react-aria-components';
+import { Button, DialogTrigger as SheetTrigger, Modal } from 'react-aria-components';
 
-import { cn } from '@/lib/utils'
+import { cn } from '@/lib/utils';
 import {
     Dialog,
     DialogBody,
@@ -14,32 +14,32 @@ import {
     DialogTitle,
     DialogX,
     sheetStyle
-} from './dialog'
+} from './dialog';
 
 const Sheet = (props: DialogTriggerProps) => {
-    return <SheetTrigger {...props} />
-}
+    return <SheetTrigger {...props} />;
+};
 
 interface SheetContentProps
     extends Omit<ComponentProps<typeof Modal>, 'children'>,
         Omit<ModalOverlayProps, 'className' | 'children'> {
-    'aria-label'?: DialogProps['aria-label']
-    'aria-labelledby'?: DialogProps['aria-labelledby']
-    role?: DialogProps['role']
-    closeButton?: boolean
-    side?: 'top' | 'bottom' | 'left' | 'right'
-    children?: DialogProps['children']
+    'aria-label'?: DialogProps['aria-label'];
+    'aria-labelledby'?: DialogProps['aria-labelledby'];
+    role?: DialogProps['role'];
+    closeButton?: boolean;
+    side?: 'top' | 'bottom' | 'left' | 'right';
+    children?: DialogProps['children'];
 }
 
 const SheetContent = ({
-    side = 'right',
-    role = 'dialog',
-    closeButton = true,
-    className,
-    children,
-    ...props
-}: SheetContentProps) => {
-    const isDismissable = role !== 'alertdialog'
+                          side = 'right',
+                          role = 'dialog',
+                          closeButton = true,
+                          className,
+                          children,
+                          ...props
+                      }: SheetContentProps) => {
+    const isDismissable = role !== 'alertdialog';
     return (
         <DialogOverlay isDismissable={isDismissable} {...props}>
             <Modal
@@ -68,17 +68,17 @@ const SheetContent = ({
                 </Dialog>
             </Modal>
         </DialogOverlay>
-    )
-}
+    );
+};
 
-Sheet.Trigger = (props: ButtonProps) => <Button {...props} />
+Sheet.Trigger = (props: ButtonProps) => <Button {...props} />;
 
-Sheet.Content = SheetContent
+Sheet.Content = SheetContent;
 
-Sheet.Header = DialogHeader
-Sheet.Title = DialogTitle
-Sheet.Description = DialogDescription
-Sheet.Body = DialogBody
-Sheet.Footer = DialogFooter
+Sheet.Header = DialogHeader;
+Sheet.Title = DialogTitle;
+Sheet.Description = DialogDescription;
+Sheet.Body = DialogBody;
+Sheet.Footer = DialogFooter;
 
-export { Sheet, SheetContent }
+export { Sheet, SheetContent };

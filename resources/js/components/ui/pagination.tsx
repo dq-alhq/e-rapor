@@ -1,21 +1,22 @@
-import { IconChevronLeft, IconChevronRight, IconChevronsLeft, IconChevronsRight, IconEllipsis } from 'hq-icons'
-import type { ReactNode, RefObject } from 'react'
-import type { ListBoxItemProps, ListBoxProps, ListBoxSectionProps, TextProps } from 'react-aria-components'
-import { ListBox, ListBoxItem, ListBoxSection, Text, composeRenderProps } from 'react-aria-components'
+import { IconChevronLeft, IconChevronRight, IconChevronsLeft, IconChevronsRight, IconEllipsis } from 'hq-icons';
+import type { ReactNode, RefObject } from 'react';
+import type { ListBoxItemProps, ListBoxProps, ListBoxSectionProps, TextProps } from 'react-aria-components';
+import { composeRenderProps, ListBox, ListBoxItem, ListBoxSection, Text } from 'react-aria-components';
 
-import { cn } from '@/lib/utils'
+import { cn } from '@/lib/utils';
 
 interface PaginationProps<T> extends ListBoxProps<T> {
-    ref?: RefObject<HTMLDivElement>
-    shape?: 'square' | 'circle'
+    ref?: RefObject<HTMLDivElement>;
+    shape?: 'square' | 'circle';
 }
+
 const Pagination = <T extends object>({ className, shape = 'square', ref, ...props }: PaginationProps<T>) => {
     return (
         <ListBox
             ref={ref}
-            orientation='horizontal'
+            orientation="horizontal"
             aria-label={props['aria-label'] || 'Pagination'}
-            layout='grid'
+            layout="grid"
             data-shape={shape}
             className={composeRenderProps(className, (className) =>
                 cn(
@@ -26,12 +27,13 @@ const Pagination = <T extends object>({ className, shape = 'square', ref, ...pro
             )}
             {...props}
         />
-    )
-}
+    );
+};
 
 interface PaginationPagesProps<T> extends ListBoxSectionProps<T> {
-    ref?: RefObject<HTMLElement>
+    ref?: RefObject<HTMLElement>;
 }
+
 const PaginationPages = <T extends object>({ className, ref, ...props }: PaginationPagesProps<T>) => (
     <ListBoxSection
         ref={ref}
@@ -41,16 +43,17 @@ const PaginationPages = <T extends object>({ className, ref, ...props }: Paginat
             className
         )}
     />
-)
+);
 
 interface PaginationItemProps extends ListBoxItemProps {
-    children?: ReactNode
-    className?: string
-    isCurrent?: boolean
-    slot?: 'ellipsis' | 'page' | 'last' | 'first' | 'previous' | 'next'
+    children?: ReactNode;
+    className?: string;
+    isCurrent?: boolean;
+    slot?: 'ellipsis' | 'page' | 'last' | 'first' | 'previous' | 'next';
 }
+
 const PaginationItem = ({ slot = 'page', className, isCurrent, children, ...props }: PaginationItemProps) => {
-    const textValue = slot === 'page' ? children?.toString() : slot
+    const textValue = slot === 'page' ? children?.toString() : slot;
     return (
         <ListBoxItem
             isDisabled={props.isDisabled || slot === 'ellipsis'}
@@ -83,13 +86,14 @@ const PaginationItem = ({ slot = 'page', className, isCurrent, children, ...prop
                 children
             )}
         </ListBoxItem>
-    )
-}
+    );
+};
 
 interface PaginationLabelProps extends TextProps {
-    current: number | string
-    total?: number | string
+    current: number | string;
+    total?: number | string;
 }
+
 const PaginationLabel = ({ className, current, total, ...props }: PaginationLabelProps) => (
     <ListBoxItem
         textValue={`${String(current)}/${String(total)}`}
@@ -100,7 +104,7 @@ const PaginationLabel = ({ className, current, total, ...props }: PaginationLabe
         )}
         {...props}
     >
-        <Text className='text-primary'>{current}</Text>
+        <Text className="text-primary">{current}</Text>
         {total && (
             <>
                 <span>/</span>
@@ -108,10 +112,10 @@ const PaginationLabel = ({ className, current, total, ...props }: PaginationLabe
             </>
         )}
     </ListBoxItem>
-)
+);
 
-Pagination.Item = PaginationItem
-Pagination.Pages = PaginationPages
-Pagination.Label = PaginationLabel
+Pagination.Item = PaginationItem;
+Pagination.Pages = PaginationPages;
+Pagination.Label = PaginationLabel;
 
-export { Pagination }
+export { Pagination };

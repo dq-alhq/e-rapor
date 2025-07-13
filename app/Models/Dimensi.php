@@ -2,14 +2,11 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Dimensi extends Model
 {
-    use HasFactory;
-
     /**
      * The attributes that are mass assignable.
      *
@@ -31,7 +28,7 @@ class Dimensi extends Model
         ];
     }
 
-    public function elemens(): HasMany
+    public function elemen(): HasMany
     {
         return $this->hasMany(Elemen::class);
     }

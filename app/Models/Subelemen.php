@@ -2,14 +2,11 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Subelemen extends Model
 {
-    use HasFactory;
-
     /**
      * The attributes that are mass assignable.
      *
@@ -35,6 +32,6 @@ class Subelemen extends Model
 
     public function elemen(): BelongsTo
     {
-        return $this->belongsTo(\App\Models\Elemen::class);
+        return $this->belongsTo(Elemen::class);
     }
 }

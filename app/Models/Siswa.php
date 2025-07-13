@@ -2,6 +2,9 @@
 
 namespace App\Models;
 
+use App\Observers\SiswaObserver;
+use App\Traits\HasSiswaRoles;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -9,9 +12,10 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 
+#[ObservedBy(SiswaObserver::class)]
 class Siswa extends Model
 {
-    use HasFactory;
+    use HasFactory, HasSiswaRoles;
 
     /**
      * The attributes that are mass assignable.
@@ -97,5 +101,10 @@ class Siswa extends Model
     public function catatanWaliKelas(): HasMany
     {
         return $this->hasMany(CatatanWaliKelas::class);
+    }
+
+    public function alamat(): string
+    {
+        return $this->wilayah ? $this->alamat . ', ' . $this->wilayah->name : $this->alamat;
     }
 }

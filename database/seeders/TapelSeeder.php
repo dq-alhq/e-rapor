@@ -18,6 +18,7 @@ class TapelSeeder extends Seeder
                 'tahun' => 2023,
                 'semester' => "1",
                 'tempat_rapor' => 'Melirang',
+                'aktif' => true
             ],
             [
                 'tahun' => 2023,

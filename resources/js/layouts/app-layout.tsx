@@ -1,8 +1,8 @@
 import { AppNavbar } from '@/components/app-navbar';
 import { AppSidebar } from '@/components/app-sidebar';
-import { Flash } from '@/components/flash';
+import { ToastProvider } from '@/components/toast-provider';
 import type { BreadcrumbItem } from '@/types';
-import type { ReactNode } from 'react';
+import { ReactNode } from 'react';
 
 interface AppLayoutProps {
     children: ReactNode;
@@ -13,18 +13,22 @@ interface AppLayoutProps {
 
 export default ({ children, layout = 'sidebar', variant = 'inset', breadcrumbs }: AppLayoutProps) => {
     return layout === 'sidebar' ? (
-        <div className="flex">
-            <AppSidebar variant={variant} breadcrumbs={breadcrumbs}>
-                <Flash />
-                {children}
-            </AppSidebar>
-        </div>
+        <>
+            <ToastProvider />
+            <div className="flex">
+                <AppSidebar variant={variant} breadcrumbs={breadcrumbs}>
+                    {children}
+                </AppSidebar>
+            </div>
+        </>
     ) : (
-        <div className="grid min-h-dvh w-full">
-            <AppNavbar breadcrumbs={breadcrumbs} variant={variant}>
-                <Flash />
-                {children}
-            </AppNavbar>
-        </div>
+        <>
+            <ToastProvider />
+            <div className="grid min-h-dvh w-full">
+                <AppNavbar breadcrumbs={breadcrumbs} variant={variant}>
+                    {children}
+                </AppNavbar>
+            </div>
+        </>
     );
 };

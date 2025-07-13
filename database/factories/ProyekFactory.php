@@ -2,12 +2,11 @@
 
 namespace Database\Factories;
 
-use App\Models\Elemen;
-use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Str;
+use App\Models\Guru;
 use App\Models\Proyek;
 use App\Models\Subelemen;
 use App\Models\Tapel;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
 class ProyekFactory extends Factory
 {
@@ -36,6 +35,7 @@ class ProyekFactory extends Factory
         ];
         return [
             'tapel_id' => Tapel::query()->inRandomOrder()->first('id'),
+            'koordinator_id' => Guru::query()->inRandomOrder()->first()->id,
             'tema' => $tema = fake()->randomElement($tema),
             'nama' => "Proyek {$tema}",
             'deskripsi' => fake()->sentence(),

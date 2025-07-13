@@ -19,6 +19,7 @@ class Proyek extends Model
     protected $fillable = [
         'tapel_id',
         'tema',
+        'koordinator_id',
         'nama',
         'deskripsi',
         'elemen',
@@ -46,5 +47,10 @@ class Proyek extends Model
     public function siswa(): BelongsToMany
     {
         return $this->belongsToMany(Siswa::class, 'anggota_proyeks', 'proyek_id', 'siswa_id');
+    }
+
+    public function koorinator(): BelongsTo
+    {
+        return $this->belongsTo(Guru::class, 'koordinator_id');
     }
 }

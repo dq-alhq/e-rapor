@@ -3,7 +3,6 @@
 namespace Database\Seeders;
 
 use App\Models\KelompokMapel;
-use App\Models\Mapel;
 use Illuminate\Database\Seeder;
 
 class MapelSeeder extends Seeder
@@ -15,7 +14,7 @@ class MapelSeeder extends Seeder
     {
         KelompokMapel::query()->create([
             'nama' => 'Pendidikan Agama',
-        ])->mapels()->createMany([
+        ])->mapel()->createMany([
             ['nama' => 'Pendidkan Agama Islam', 'singkatan' => 'PAI'],
             ['nama' => 'Aqidah Akhlaq', 'singkatan' => 'AQA'],
             ['nama' => 'Quran Hadits', 'singkatan' => 'QRH'],
@@ -28,7 +27,7 @@ class MapelSeeder extends Seeder
 
         KelompokMapel::query()->create([
             'nama' => 'Umum',
-        ])->mapels()->createMany([
+        ])->mapel()->createMany([
             ['nama' => 'Pendidikan Pancasila', 'singkatan' => 'PKN'],
             ['nama' => 'Matematika', 'singkatan' => 'MTK'],
             ['nama' => 'Ilmu Pengetahuan Alam', 'singkatan' => 'IPA'],
@@ -42,7 +41,7 @@ class MapelSeeder extends Seeder
 
         KelompokMapel::query()->create([
             'nama' => 'Muatan Lokal',
-        ])->mapels()->createMany([
+        ])->mapel()->createMany([
             ['nama' => 'Bahasa Daerah', 'singkatan' => 'BDR'],
             ['nama' => 'Pendidikan Lingkungan Hidup', 'singkatan' => 'PLH'],
         ]);

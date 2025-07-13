@@ -2,14 +2,11 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class AnggotaEkskul extends Model
 {
-    use HasFactory;
-
     /**
      * The attributes that are mass assignable.
      *
@@ -37,7 +34,7 @@ class AnggotaEkskul extends Model
 
     public function anggotaKelas(): BelongsTo
     {
-        return $this->belongsTo(\App\Models\AnggotaKelas::class);
+        return $this->belongsTo(AnggotaKelas::class);
     }
 
     public function ekskul(): BelongsTo

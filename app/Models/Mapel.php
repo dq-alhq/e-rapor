@@ -35,22 +35,18 @@ class Mapel extends Model
         ];
     }
 
+    public function kelompokMapel(): BelongsTo
+    {
+        return $this->belongsTo(KelompokMapel::class);
+    }
+
     public function kelas(): BelongsToMany
     {
-        return $this->belongsToMany(Kelas::class)
-            ->using(Pembelajaran::class)
-            ->as('pembelajaran')
-            ->withPivot('id', 'kelas_id', 'mapel_id', 'guru_id', 'kkm')
-            ->withTimestamps();
+        return $this->belongsToMany(Kelas::class, 'pembelajarans', 'mapel_id', 'kelas_id');
     }
 
     public function guru(): BelongsToMany
     {
         return $this->belongsToMany(Guru::class, 'pembelajarans', 'mapel_id', 'guru_id');
-    }
-
-    public function kelompokMapel(): BelongsTo
-    {
-        return $this->belongsTo(KelompokMapel::class);
     }
 }

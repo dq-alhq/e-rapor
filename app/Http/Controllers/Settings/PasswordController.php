@@ -33,7 +33,7 @@ class PasswordController extends Controller
         $request->user()->update([
             'password' => Hash::make($validated['password']),
         ]);
-
+        toast("Password berhasil diperbarui");
         return back();
     }
 }
