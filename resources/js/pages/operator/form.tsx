@@ -1,7 +1,7 @@
 import { Button, buttonStyle, Card, DatePicker, Form, Link, Radio, RadioGroup, TextField } from '@/components/ui';
+import { UploadFoto } from '@/components/upload-foto';
 import WilayahSelect from '@/components/wilayah-select';
 import AppLayout from '@/layouts/app-layout';
-import { UploadFoto } from '@/pages/operator/upload-foto';
 import { type BreadcrumbItem, FormSetting, SharedData } from '@/types';
 import { Head, useForm, usePage } from '@inertiajs/react';
 import { getLocalTimeZone, parseDate, today } from '@internationalized/date';

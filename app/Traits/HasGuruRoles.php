@@ -111,4 +111,23 @@ trait HasGuruRoles
     {
         return $this->id == $ekskul->guru->id;
     }
+
+    public function getRoles(): array
+    {
+        $roles = [];
+        if ($this->isKepsek()) $roles[] = 'Kepala Sekolah';
+        if ($this->pembinaEkskul()) {
+            $pembina = $this->pembinaEkskul()->map(function ($ekskul) {
+                return 'Pembina ' . $ekskul['nama'];
+            });
+            $roles = array_merge($roles, $pembina->toArray());
+        }
+        if ($this->waliKelas()) {
+            $wali = $this->waliKelas()->map(function ($kelas) {
+                return 'Wali Kelas ' . $kelas['nama'];
+            });
+            $roles = array_merge($roles, $wali->toArray());
+        }
+        return $roles;
+    }
 }

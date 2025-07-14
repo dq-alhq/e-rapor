@@ -65,8 +65,8 @@ const PaginationItem = ({ slot = 'page', className, isCurrent, children, ...prop
                     'pressed:bg-muted/50 hover:bg-muted/40',
                     'focus-visible:border-primary focus-visible:ring-4 focus-visible:ring-ring',
                     'selected:pointer-events-none selected:bg-primary selected:text-primary-fg',
-                    'disabled:cursor-default',
-                    isCurrent && 'bg-primary text-primary-fg',
+                    'disabled:cursor-default disabled:opacity-50 disabled:pointer-events-none',
+                    isCurrent && 'bg-primary opacity-100! text-primary-fg',
                     className
                 )
             )}

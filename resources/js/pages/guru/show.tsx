@@ -17,27 +17,15 @@ export default function GuruShow({ guru }: Props) {
                 <Card className="h-fit lg:col-span-1">
                     <Card.Content className="mt-6 flex flex-col items-center gap-2">
                         <Avatar shape="square" size="5xl" src={guru.avatar || ''} alt={guru.nama} />
-                        <div className="flex flex-wrap items-center justify-center gap-1 text-sm">
+                        <div className="my-2 flex flex-wrap items-center justify-center gap-1 text-sm">
                             {/* @ts-expect-error additional-type */}
                             {guru.roles?.map((r) => (
                                 <Badge variant="danger" key={r}>
                                     {r}
                                 </Badge>
                             ))}
-                            {/* @ts-expect-error additional-type */}
-                            {guru.wali_kelas?.map((r) => (
-                                <Badge variant="secondary" key={r.id}>
-                                    Wali Kelas {r.nama}
-                                </Badge>
-                            ))}
-                            {/* @ts-expect-error additional-type */}
-                            {guru.pembina_ekskul?.map((r) => (
-                                <Badge variant="outline" key={r.id}>
-                                    Pembina {r.nama}
-                                </Badge>
-                            ))}
                         </div>
-                        {Object.keys(guru.pembelajaran).map((p) => (
+                        {Object.keys(guru?.pembelajaran).map((p) => (
                             <fieldset key={p} className="w-full rounded-lg border px-3 py-2">
                                 <legend className="text-sm font-semibold">{p}</legend>
                                 <div className="flex flex-wrap gap-1">
@@ -83,7 +71,6 @@ export default function GuruShow({ guru }: Props) {
                             <DL.T>Telepon</DL.T>
                             <DL.D>{guru.telepon}</DL.D>
                             <DL.T>Alamat</DL.T>
-                            {/* @ts-expect-error no-type */}
                             <DL.D>{guru.alamat_lengkap}</DL.D>
                         </DL>
                     </Card.Content>

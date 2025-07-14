@@ -29,15 +29,4 @@ trait HasSiswaRoles
     {
         return $proyek->siswa()->where('siswa_id', $this->id)->exists();
     }
-
-    public function statusDalamKeluarga(): string
-    {
-        return match ($this->status_dalam_keluarga) {
-            1 => 'Anak Kandung',
-            2 => 'Anak Tiri',
-            3 => 'Anak Angkat',
-            default => 'Lainnya',
-        };
-
-    }
 }

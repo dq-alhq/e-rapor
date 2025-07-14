@@ -15,9 +15,6 @@ class KepsekMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (auth()->guest()) {
-            return redirect()->route('login');
-        }
         if (auth()->user()->isKepsek()) {
             return $next($request);
         }

@@ -1,10 +1,10 @@
-import PageOptions from '@/components/page-options';
+import DataOptions from '@/components/data-options';
 import Paginator from '@/components/paginator';
 import { Avatar, Badge, buttonStyle, Header, Link, Table } from '@/components/ui';
 import AppLayout from '@/layouts/app-layout';
 import type { BreadcrumbItem, Paginate } from '@/types';
 import { Head } from '@inertiajs/react';
-import { IconUserPlus } from 'hq-icons';
+import { IconChevronsUpDown, IconUserPlus } from 'hq-icons';
 
 const breadcrumbs: BreadcrumbItem[] = [
     { title: 'Dashboard', href: '/' },
@@ -16,7 +16,7 @@ interface Props {
 }
 
 export default function Guru({ gurus }: Props) {
-    const { data, meta, links } = gurus;
+    const { data, meta, links, attributes } = gurus;
 
     return (
         <>
@@ -32,13 +32,25 @@ export default function Guru({ gurus }: Props) {
                         </Link>
                     </Header.Action>
                 </Header>
-                <PageOptions />
+                <DataOptions attributes={attributes} />
                 <Table aria-label="Data Guru">
                     <Table.Header>
                         <Table.Column isRowHeader className="w-12">
                             #
                         </Table.Column>
-                        <Table.Column>Nama</Table.Column>
+                        <Table.Column>
+                            <Link
+                                className="flex items-center gap-2"
+                                href={route('guru.index', {
+                                    ...attributes,
+                                    sort: 'nama',
+                                    dir: attributes?.dir === 'asc' ? 'desc' : 'asc',
+                                })}
+                            >
+                                Nama
+                                <IconChevronsUpDown />
+                            </Link>
+                        </Table.Column>
                         <Table.Column>Mata Pelajaran</Table.Column>
                     </Table.Header>
                     <Table.Body>
@@ -50,7 +62,7 @@ export default function Guru({ gurus }: Props) {
                                     <span>{guru.nama}</span>
                                 </Table.Cell>
                                 <Table.Cell className="space-x-1">
-                                    {guru.mapel.map((m) => (
+                                    {guru?.mapel?.map((m) => (
                                         <Badge key={`${guru.id}-${m.id}`}>{m.singkatan}</Badge>
                                     ))}
                                 </Table.Cell>

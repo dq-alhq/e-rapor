@@ -45,7 +45,7 @@ const SheetContent = ({
             <Modal
                 className={sheetStyle({
                     side,
-                    className: side === 'top' || side === 'bottom' ? 'h-fit' : 'h-full'
+                    className: `${side === 'top' || side === 'bottom' ? 'h-fit' : 'h-full'} ${className}`
                 })}
                 {...props}
             >

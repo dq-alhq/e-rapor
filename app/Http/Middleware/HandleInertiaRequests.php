@@ -41,6 +41,7 @@ class HandleInertiaRequests extends Middleware
         return [
             ...parent::share($request),
             'sekolah' => fn() => Sekolah::query()->with(['wilayah', 'kepsek'])->first(),
+            'tapel_aktif' => fn() => $request->session()->get('tapel') ?? null,
             'auth' => [
                 'user' => $request->user() ? AuthUserResource::make($request->user()) : null,
             ],

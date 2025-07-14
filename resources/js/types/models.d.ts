@@ -151,22 +151,26 @@ declare global {
             wilayah_id: number | null;
             created_at: string | null;
             updated_at: string | null;
+            alamat_lengkap: string | null;
             avatar: string | null;
             // relations
             user: User;
             mapel: Mapel[];
             kelas: Kela[];
             pembelajaran: Pembelajaran[];
+            ekskul: Ekskul[];
             wilayah: Wilayah;
             // counts
             mapel_count: number;
             kelas_count: number;
             pembelajaran_count: number;
+            ekskul_count: number;
             // exists
             user_exists: boolean;
             mapel_exists: boolean;
             kelas_exists: boolean;
             pembelajaran_exists: boolean;
+            ekskul_exists: boolean;
             wilayah_exists: boolean;
         }
 
@@ -179,7 +183,7 @@ declare global {
             created_at: string | null;
             updated_at: string | null;
             // relations
-            siswa: AnggotaKela;
+            siswa: AnggotaKelas;
             penilaian: Penilaian;
             // counts
             // exists
@@ -269,6 +273,7 @@ declare global {
             wilayah_id: number | null;
             created_at: string | null;
             updated_at: string | null;
+            alamat_lengkap: string | null;
             avatar: string | null;
             // relations
             user: User;
@@ -394,11 +399,12 @@ declare global {
             telepon_wali: string | null;
             created_at: string | null;
             updated_at: string | null;
+            alamat_lengkap: string | null;
             avatar: string | null;
             // relations
             user: User;
             anggota_kelas: AnggotaKela[];
-            kelas: Kelas[];
+            kelas: Kelas[] | string;
             wilayah: Wilayah;
             ekskul: Ekskul[];
             proyek: Proyek[];
@@ -439,19 +445,22 @@ declare global {
             id: number;
             tahun: number;
             semester: string;
-            tempat_rapor: string;
+            tempat_rapor: string | null;
             tanggal_rapor: string | null;
             aktif: boolean;
             created_at: string | null;
             updated_at: string | null;
             // relations
             kelas: Kela[];
+            siswa: AnggotaKela[];
             proyek: Proyek[];
             // counts
             kelas_count: number;
+            siswa_count: number;
             proyek_count: number;
             // exists
             kelas_exists: boolean;
+            siswa_exists: boolean;
             proyek_exists: boolean;
         }
 

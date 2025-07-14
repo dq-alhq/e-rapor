@@ -1,31 +1,40 @@
-import { Button, buttonStyle, Card, DatePicker, Form, Link, Radio, RadioGroup, TextField } from '@/components/ui';
+import { Button, buttonStyle, Card, DatePicker, Form, Header, Link, NumberField, Radio, RadioGroup, TextField } from '@/components/ui';
+import { UploadFoto } from '@/components/upload-foto';
 import WilayahSelect from '@/components/wilayah-select';
 import AppLayout from '@/layouts/app-layout';
-import { UploadFoto } from '@/pages/operator/upload-foto';
 import { type BreadcrumbItem, FormSetting, SharedData } from '@/types';
 import { Head, useForm, usePage } from '@inertiajs/react';
 import { getLocalTimeZone, parseDate, today } from '@internationalized/date';
 import { IconArrowLeft, IconSave } from 'hq-icons';
 
 interface Props {
-    operator: model.Operator;
+    siswa: model.Siswa;
     form: FormSetting;
 }
 
-export default function OperatorForm({ operator, form }: Props) {
+export default function SiswaForm({ siswa, form }: Props) {
     const { data, setData, post, processing, errors } = useForm({
         _method: form.method,
-        nama: operator.nama || '',
-        jk: operator.jk || 'l',
-        nip: operator.nip || '',
-        nuptk: operator.nuptk || '',
-        nik: operator.nik || '',
-        tempat_lahir: operator.tempat_lahir || '',
-        tanggal_lahir: operator.tanggal_lahir ?? today(getLocalTimeZone()).toString(),
-        telepon: operator.telepon || '',
-        alamat: operator.alamat || '',
-        wilayah_id: operator.wilayah_id || '',
-        avatar: operator.avatar || (null as File | null),
+        nama: siswa.nama || '',
+        jk: siswa.jk || 'l',
+        nik: siswa.nik || '',
+        nis: siswa.nis || '',
+        nisn: siswa.nisn || '',
+        tempat_lahir: siswa.tempat_lahir || '',
+        tanggal_lahir: siswa.tanggal_lahir ?? today(getLocalTimeZone()).toString(),
+        telepon: siswa.telepon || '',
+        alamat: siswa.alamat || '',
+        wilayah_id: siswa.wilayah_id || '',
+        avatar: siswa.avatar || (null as File | null),
+        status_dalam_keluarga: siswa.status_dalam_keluarga || '1',
+        anak_ke: siswa.anak_ke || 1,
+        nama_ayah: siswa.nama_ayah || '',
+        pekerjaan_ayah: siswa.pekerjaan_ayah || '',
+        nama_ibu: siswa.nama_ibu || '',
+        pekerjaan_ibu: siswa.pekerjaan_ibu || '',
+        nama_wali: siswa.nama_wali || '',
+        pekerjaan_wali: siswa.pekerjaan_wali || '',
+        telepon_wali: siswa.telepon_wali || '',
     });
 
     function onSubmit(e: { preventDefault: () => void }) {
@@ -34,14 +43,14 @@ export default function OperatorForm({ operator, form }: Props) {
     }
 
     const { prev_url } = usePage<SharedData>().props.ziggy;
-
+    
     return (
         <>
             <Head title={form.title} />
             <div className="grid grid-cols-1 gap-6 p-6 lg:grid-cols-4">
                 <Card className="h-fit lg:col-span-1">
                     <Card.Content className="mt-6 flex flex-col items-center gap-2">
-                        <UploadFoto value={operator.avatar || ''} onChange={(v) => setData('avatar', v)} />
+                        <UploadFoto value={siswa.avatar || ''} onChange={(v) => setData('avatar', v)} />
                     </Card.Content>
                 </Card>
                 <Card className="h-fit lg:col-span-3">
@@ -49,7 +58,7 @@ export default function OperatorForm({ operator, form }: Props) {
                         <Card.Title>{form.title}</Card.Title>
                         <Card.Description>Silakan isi form dibawah ini</Card.Description>
                         <Card.Action>
-                            <Link className={buttonStyle({ variant: 'outline' })} href={prev_url ?? route('operator.index')}>
+                            <Link className={buttonStyle({ variant: 'outline' })} href={prev_url ?? route('siswa.index')}>
                                 <IconArrowLeft />
                                 Kembali
                             </Link>
@@ -72,11 +81,11 @@ export default function OperatorForm({ operator, form }: Props) {
                                 <TextField
                                     className="col-span-full md:col-span-1"
                                     type="text"
-                                    label="NIP"
-                                    name="nip"
-                                    value={data.nip}
-                                    onChange={(v) => setData('nip', v)}
-                                    errorMessage={errors.nip}
+                                    label="NIS"
+                                    name="nis"
+                                    value={data.nis}
+                                    onChange={(v) => setData('nis', v)}
+                                    errorMessage={errors.nis}
                                 />
                                 <RadioGroup
                                     className="col-span-full"
@@ -93,11 +102,11 @@ export default function OperatorForm({ operator, form }: Props) {
                                 <TextField
                                     className="col-span-full md:col-span-2"
                                     type="text"
-                                    label="NUPTK"
-                                    name="nuptk"
-                                    value={data.nuptk}
-                                    onChange={(v) => setData('nuptk', v)}
-                                    errorMessage={errors.nuptk}
+                                    label="NISN"
+                                    name="nisn"
+                                    value={data.nisn}
+                                    onChange={(v) => setData('nisn', v)}
+                                    errorMessage={errors.nisn}
                                 />
                                 <TextField
                                     className="col-span-full md:col-span-2"
@@ -151,6 +160,91 @@ export default function OperatorForm({ operator, form }: Props) {
                                     onSelectionChange={(v) => setData('wilayah_id', v!)}
                                     errorMessage={errors.wilayah_id}
                                 />
+                                <NumberField
+                                    className="col-span-full md:col-span-2"
+                                    label="Anak Ke"
+                                    name="anak_ke"
+                                    value={data.anak_ke}
+                                    onChange={(v) => setData('anak_ke', v)}
+                                    errorMessage={errors.anak_ke}
+                                />
+                                <RadioGroup
+                                    className="col-span-full md:col-span-2"
+                                    name="status_dalam_keluarga"
+                                    label="Status Dalam Keluarga"
+                                    value={String(data.status_dalam_keluarga)}
+                                    onChange={(v) => setData('status_dalam_keluarga', v)}
+                                    orientation="horizontal"
+                                    isRequired
+                                >
+                                    <Radio value="1" label="Anak Kandung" />
+                                    <Radio value="2" label="Anak Tiri" />
+                                    <Radio value="3" label="Anak Angkat" />
+                                </RadioGroup>
+                                <Header className="col-span-full my-4">Data Orang Tua Siswa</Header>
+                                <TextField
+                                    className="col-span-full md:col-span-2"
+                                    type="text"
+                                    label="Nama Ayah"
+                                    name="nama_ayah"
+                                    value={data.nama_ayah}
+                                    onChange={(v) => setData('nama_ayah', v)}
+                                    errorMessage={errors.nama_ayah}
+                                />
+                                <TextField
+                                    className="col-span-full md:col-span-2"
+                                    type="text"
+                                    label="Pekerjaan Ayah"
+                                    name="pekerjaan_ayah"
+                                    value={data.pekerjaan_ayah}
+                                    onChange={(v) => setData('pekerjaan_ayah', v)}
+                                    errorMessage={errors.pekerjaan_ayah}
+                                />
+                                <TextField
+                                    className="col-span-full md:col-span-2"
+                                    type="text"
+                                    label="Nama Ibu"
+                                    name="nama_ibu"
+                                    value={data.nama_ibu}
+                                    onChange={(v) => setData('nama_ibu', v)}
+                                    errorMessage={errors.nama_ibu}
+                                />
+                                <TextField
+                                    className="col-span-full md:col-span-2"
+                                    type="text"
+                                    label="Pekerjaan Ibu"
+                                    name="pekerjaan_ibu"
+                                    value={data.pekerjaan_ibu}
+                                    onChange={(v) => setData('pekerjaan_ibu', v)}
+                                    errorMessage={errors.pekerjaan_ibu}
+                                />
+                                <TextField
+                                    className="col-span-full md:col-span-2"
+                                    type="text"
+                                    label="Nama Wali"
+                                    name="nama_wali"
+                                    value={data.nama_wali}
+                                    onChange={(v) => setData('nama_wali', v)}
+                                    errorMessage={errors.nama_wali}
+                                />
+                                <TextField
+                                    className="col-span-full md:col-span-2"
+                                    type="text"
+                                    label="Pekerjaan Wali"
+                                    name="pekerjaan_wali"
+                                    value={data.pekerjaan_wali}
+                                    onChange={(v) => setData('pekerjaan_wali', v)}
+                                    errorMessage={errors.pekerjaan_wali}
+                                />
+                                <TextField
+                                    className="col-span-full md:col-span-2"
+                                    type="text"
+                                    label="Telepon Wali"
+                                    name="telepon_wali"
+                                    value={data.telepon_wali}
+                                    onChange={(v) => setData('telepon_wali', v)}
+                                    errorMessage={errors.telepon_wali}
+                                />
                             </div>
                         </Card.Content>
                         <Card.Footer>
@@ -168,8 +262,8 @@ export default function OperatorForm({ operator, form }: Props) {
 
 const breadcrumbs: BreadcrumbItem[] = [
     { title: 'Dashboard', href: '/' },
-    { title: 'Data Operator', href: '/operator' },
-    { title: 'Edit Operator', href: '/operator' },
+    { title: 'Data Siswa', href: '/siswa' },
+    { title: 'Edit Siswa', href: '/siswa' },
 ];
 
-OperatorForm.layout = (page: React.ReactNode) => <AppLayout children={page} breadcrumbs={breadcrumbs} />;
+SiswaForm.layout = (page: React.ReactNode) => <AppLayout children={page} breadcrumbs={breadcrumbs} />;

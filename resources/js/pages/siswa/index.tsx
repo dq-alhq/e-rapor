@@ -1,10 +1,10 @@
-import PageOptions from '@/components/page-options';
+import DataOptions from '@/components/data-options';
 import Paginator from '@/components/paginator';
-import { Avatar, buttonStyle, Header, Link, Table } from '@/components/ui';
+import { Avatar, Badge, buttonStyle, Header, Link, Table } from '@/components/ui';
 import AppLayout from '@/layouts/app-layout';
 import type { BreadcrumbItem, Paginate } from '@/types';
 import { Head } from '@inertiajs/react';
-import { IconUserPlus } from 'hq-icons';
+import { IconChevronsUpDown, IconUserPlus } from 'hq-icons';
 
 const breadcrumbs: BreadcrumbItem[] = [
     { title: 'Dashboard', href: '/' },
@@ -13,18 +13,21 @@ const breadcrumbs: BreadcrumbItem[] = [
 
 interface Props {
     siswas: Paginate & { data: model.Siswa[] };
+    kelas: model.Kelas[];
+    tapel_aktif: model.Tapel;
 }
 
-export default function Siswa({ siswas }: Props) {
-    const { data, meta, links } = siswas;
-
+export default function Siswa({ siswas, kelas, tapel_aktif }: Props) {
+    const { data, meta, links, attributes } = siswas;
     return (
         <>
             <Head title="Data Siswa" />
             <div className="flex h-[calc(100vh-4.1rem)] flex-1 flex-col rounded-xl p-6">
                 <Header className="mb-6">
                     <Header.Title>Daftar Siswa</Header.Title>
-                    <Header.Description>Daftar Siswa yang ada di sekolah ini</Header.Description>
+                    <Header.Description>
+                        Pada Tahun Pelajaran {tapel_aktif.tahun}/{tapel_aktif.tahun + 1} Semester {tapel_aktif.semester}
+                    </Header.Description>
                     <Header.Action>
                         <Link href={route('siswa.create')} className={buttonStyle({ size: 'sm' })}>
                             <IconUserPlus />
@@ -32,13 +35,38 @@ export default function Siswa({ siswas }: Props) {
                         </Link>
                     </Header.Action>
                 </Header>
-                <PageOptions />
+                <DataOptions attributes={attributes} filters={kelas.map((kelas) => ({ id: String(kelas.id), label: kelas.nama }))} />
                 <Table aria-label="Data Siswa">
                     <Table.Header>
-                        <Table.Column isRowHeader className="w-12">
+                        <Table.Column isRowHeader className="w-14">
                             #
                         </Table.Column>
-                        <Table.Column>Nama</Table.Column>
+                        <Table.Column>
+                            <Link
+                                className="flex items-center gap-2"
+                                href={route('siswa.index', {
+                                    ...attributes,
+                                    sort: 'nama',
+                                    dir: attributes?.dir === 'asc' ? 'desc' : 'asc',
+                                })}
+                            >
+                                Nama
+                                <IconChevronsUpDown />
+                            </Link>
+                        </Table.Column>
+                        <Table.Column>
+                            <Link
+                                className="flex items-center gap-2"
+                                href={route('siswa.index', {
+                                    ...attributes,
+                                    sort: 'nis',
+                                    dir: attributes?.dir === 'asc' ? 'desc' : 'asc',
+                                })}
+                            >
+                                NIS
+                                <IconChevronsUpDown />
+                            </Link>
+                        </Table.Column>
                         <Table.Column>Kelas</Table.Column>
                     </Table.Header>
                     <Table.Body>
@@ -49,8 +77,8 @@ export default function Siswa({ siswas }: Props) {
                                     <Avatar alt={siswa.nama} shape="square" size="xs" src={siswa.avatar || ''} />
                                     <span>{siswa.nama}</span>
                                 </Table.Cell>
-                                {/* @ts-expect-error additional-type */}
-                                <Table.Cell>{siswa.kelas}</Table.Cell>
+                                <Table.Cell className="space-x-2">{siswa.nis}</Table.Cell>
+                                <Table.Cell>{(siswa.kelas as string) ?? <Badge variant="danger">BELUM DIISI</Badge>}</Table.Cell>
                             </Table.Row>
                         ))}
                     </Table.Body>

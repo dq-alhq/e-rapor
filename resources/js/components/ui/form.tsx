@@ -1,4 +1,4 @@
-import type { ReactNode, Ref } from 'react'
+import type { ReactNode, Ref } from 'react';
 
 import type {
     FieldErrorProps,
@@ -8,18 +8,18 @@ import type {
     LabelProps,
     TextProps,
     ValidationResult
-} from 'react-aria-components'
+} from 'react-aria-components';
 import {
-    Group,
+    composeRenderProps,
     FieldError as RACFieldError,
     Form as RACForm,
+    Group,
     Input as RACInput,
     Label as RACLabel,
-    Text,
-    composeRenderProps
-} from 'react-aria-components'
+    Text
+} from 'react-aria-components';
 
-import { tv } from 'tailwind-variants'
+import { tv } from 'tailwind-variants';
 
 const fieldGroupStyle = tv({
     base: [
@@ -35,7 +35,7 @@ const fieldGroupStyle = tv({
         '**:[input]:w-full **:[input]:p-2 **:[input]:text-base **:[input]:outline-hidden sm:**:[input]:text-sm',
         'disabled:pointer-events-none'
     ]
-})
+});
 
 const labelStyle = tv({
     base: [
@@ -44,36 +44,36 @@ const labelStyle = tv({
         'group-invalid/field:text-danger! group-disabled/field:text-muted-fg! group-has-invalid/field:text-danger!',
         'group-disabled/field:text-muted-fg group-has-disabled/field:text-muted-fg'
     ]
-})
+});
 
 const descriptionStyle = tv({
     base: 'text-pretty text-muted-fg text-sm'
-})
+});
 
 const errorStyle = tv({
     base: 'text-danger text-sm/5'
-})
+});
 
-const Form = (props: FormProps) => <RACForm {...props} />
+const Form = (props: FormProps) => <RACForm {...props} />;
 
 interface FieldProps {
-    label?: string
-    description?: string
-    errorMessage?: string | ((validation: ValidationResult) => string) | ReactNode
+    label?: string;
+    description?: string;
+    errorMessage?: string | ((validation: ValidationResult) => string) | ReactNode;
 }
 
 const Label = ({ className, ...props }: LabelProps) => (
-    <RACLabel slot='label' {...props} className={labelStyle({ className })} />
-)
+    <RACLabel slot="label" {...props} className={labelStyle({ className })} />
+);
 
 const Description = ({ className, ...props }: TextProps) => (
-    <Text {...props} slot='description' className={descriptionStyle({ className })} />
-)
+    <Text {...props} slot="description" className={descriptionStyle({ className })} />
+);
 
 const FieldError = ({ className, ...props }: FieldErrorProps) => {
     return Array.isArray(props.children) ? (
         <RACFieldError {...props} className={composeRenderProps(className, (className) => errorStyle({ className }))}>
-            <ul className='list-inside list-disc'>
+            <ul className="list-inside list-disc">
                 {props.children.map((child, index) => (
                     <li key={index}>{child}</li>
                 ))}
@@ -81,8 +81,8 @@ const FieldError = ({ className, ...props }: FieldErrorProps) => {
         </RACFieldError>
     ) : (
         <RACFieldError {...props} className={composeRenderProps(className, (className) => errorStyle({ className }))} />
-    )
-}
+    );
+};
 
 const FieldGroup = ({ className, ref, ...props }: GroupProps & { ref?: Ref<HTMLDivElement> }) => {
     return (
@@ -91,12 +91,12 @@ const FieldGroup = ({ className, ref, ...props }: GroupProps & { ref?: Ref<HTMLD
             className={composeRenderProps(className, (className) => fieldGroupStyle({ className }))}
             {...props}
         />
-    )
-}
+    );
+};
 
-const Input = ({ className, ref, ...props }: InputProps & { ref?: Ref<HTMLInputElement> }) => (
+const Input = ({ ref, ...props }: InputProps & { ref?: Ref<HTMLInputElement> }) => (
     <RACInput ref={ref} {...props} />
-)
+);
 
 export {
     Description,
@@ -109,6 +109,6 @@ export {
     fieldGroupStyle,
     labelStyle,
     type FieldProps
-}
+};
 
-export { Form }
+export { Form };

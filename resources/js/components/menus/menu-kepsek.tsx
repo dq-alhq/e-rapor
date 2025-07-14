@@ -24,12 +24,12 @@ const masterDataMenu: NavItem[] = [
     },
     {
         title: 'Tahun Pelajaran',
-        href: '/kepsek/tapel',
+        href: route('tapel.index'),
         icon: IconCalendarDays,
     },
     {
         title: 'Kelas',
-        href: '/kepsek/kelas',
+        href: route('kelas.index'),
         icon: IconLayoutPanelTop,
     },
     {

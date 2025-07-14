@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\SiswaRequest;
 use App\Http\Resources\SiswaDetailsResource;
 use App\Http\Resources\SiswaResource;
+use App\Models\Kelas;
 use App\Models\Siswa;
 use Illuminate\Http\Request;
 
@@ -16,23 +17,44 @@ class SiswaController extends Controller
      */
     public function index(Request $request)
     {
-        $search = $request->q ?? null;
+        $search = $request->search ?? null;
         $perPage = $request->perPage ?? 10;
+        $sort = $request->sort ?? 'id';
+        $dir = $request->dir ?? 'asc';
+        $filter = $request->filter ?? null;
 
-        $siswas = Siswa::query()
-            ->with(['wilayah'])
-            ->when($search, function ($query, $search) {
-                return $query->where('nama', 'like', "%$search%");
-            })
-            ->paginate($perPage);
+        $siswas = SiswaResource::collection(
+            Siswa::query()
+                ->when($filter, function ($query, $k) {
+                    return $query->whereHas('kelas', function ($query) use ($k) {
+                        $query->whereIn('kelas_id', $k);
+                    });
+                })
+                ->when($search, function ($query, $search) {
+                    return $query->where('nama', 'like', "%$search%");
+                })
+                ->when($sort, function ($query, $sort) use ($dir) {
+                    return $query->orderBy($sort, $dir);
+                })
+                ->paginate($perPage)
+        )->additional([
+            'attributes' => [
+                'search' => $search,
+                'perPage' => $perPage,
+                'sort' => $sort,
+                'dir' => $dir,
+                'filter' => $filter
+            ]
+        ]);
+
+        $kelas = Kelas::query()->where('tapel_id', tapelAktif())->get();
 
         return inertia('siswa/index', [
-                'siswas' => fn() => SiswaResource::collection($siswas),
-
-                'page_options' => [
-                    'search' => $search,
-                    'perPage' => $perPage
-                ],
+                'siswas' => fn() => $siswas,
+                'kelas' => $kelas->map(fn($kelas) => [
+                    'id' => $kelas->id,
+                    'nama' => $kelas->nama,
+                ]),
             ]
         );
     }

@@ -28,10 +28,13 @@ Route::middleware('auth')->group(function () {
     });
 });
 
-Route::middleware('kepsek')->group(function () {
+Route::middleware(['auth', 'operator'])->group(function () {
     Route::inertia('kepsek', 'kepsek')->name('kepsek');
     Route::resource('sekolah', Controllers\Kepsek\SekolahController::class);
     Route::resource('tapel', Controllers\Kepsek\TapelController::class);
+    Route::put('tapel/{tapel}/aktif', [Controllers\Kepsek\TapelController::class, 'aktif'])->name('tapel.aktif');
+    Route::resource('kelas', Controllers\Kepsek\KelasController::class);
+
     Route::resource('mapel', Controllers\Kepsek\MapelController::class);
     Route::resource('siswa', Controllers\Kepsek\SiswaController::class);
     Route::resource('guru', Controllers\Kepsek\GuruController::class);

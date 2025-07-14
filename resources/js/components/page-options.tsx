@@ -1,5 +1,6 @@
 import { SearchField, Select } from '@/components/ui';
 import { cn } from '@/lib/utils';
+import type { PageProps } from '@/types';
 import { router, usePage } from '@inertiajs/react';
 import React from 'react';
 import { type Key } from 'react-aria-components';
@@ -13,15 +14,11 @@ const PerPages = [
 
 interface Props {
     className?: string;
+    children?: React.ReactNode;
 }
 
-interface PageOptions {
-    perPage: number;
-    search: string;
-}
-
-export default function PageOptions({ className }: Props) {
-    const { page_options } = usePage<{ page_options: PageOptions }>().props;
+export default function PageOptions({ className, children }: Props) {
+    const { page_options } = usePage<{ page_options: PageProps }>().props;
 
     const [perPage, setPerPage] = React.useState<Key | null>(page_options.perPage || 10);
     const [search, setSearch] = React.useState<string>(page_options.search || '');
@@ -47,7 +44,10 @@ export default function PageOptions({ className }: Props) {
                     </Select.Item>
                 )}
             </Select>
-            <SearchField aria-label="Search" value={search} onChange={handleSearch} />
+            <div className="flex gap-2">
+                {children}
+                <SearchField aria-label="Search" value={search} onChange={handleSearch} />
+            </div>
         </div>
     );
 }

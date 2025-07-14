@@ -2,14 +2,14 @@
 
 namespace App\Http\Resources;
 
-use App\Models\Siswa;
+use App\Models\Kelas;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
- * @mixin Siswa
+ * @mixin Kelas
  */
-class SiswaResource extends JsonResource
+class KelasResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -20,10 +20,13 @@ class SiswaResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'nis' => $this->nis,
             'nama' => $this->nama,
-            'kelas' => $this->kelasSekarang()->nama ?? null,
-            'avatar' => $this->user->avatar ? route('image', $this->user->avatar) : null,
+            'tingkat' => $this->tingkat,
+            'wali' => [
+                'id' => $this->wali->id,
+                'nama' => $this->wali->nama
+            ],
+            'siswa_count' => $this->siswa_count,
         ];
     }
 }

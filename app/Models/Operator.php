@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-#[ObservedBy(OperatorObserver::class)]
+#[ObservedBy([OperatorObserver::class])]
 class Operator extends Model
 {
     use HasFactory;

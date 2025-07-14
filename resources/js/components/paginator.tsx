@@ -12,7 +12,7 @@ export default function Paginator({ className, only, meta, links }: PaginateProp
     const isMobile = useIsMobile();
     const routerOptions = { only: only, preserveScroll: true, preserveState: true };
     return (
-        <div className={cn('mt-6 flex w-full flex-col-reverse items-center gap-3 xl:flex-row xl:justify-between', className)}>
+        <div className={cn('mt-6 flex w-full flex-col-reverse items-center gap-3 pb-6 xl:flex-row xl:justify-between', className)}>
             <div>
                 Menampilkan {meta.from} - {meta.to} dari {meta.total}
             </div>

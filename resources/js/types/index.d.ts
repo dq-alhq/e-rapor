@@ -30,8 +30,18 @@ export interface SharedData {
     ziggy: Config & { location: string; prev_url: string };
     status?: string;
     toast?: ToastProps;
+    sekolah?: model.Sekolah;
+    tapel_aktif?: model.Tapel;
 
     [key: string]: unknown;
+}
+
+export interface PageProps {
+    perPage: number;
+    search: string;
+    sort: string;
+    dir: 'asc' | 'desc';
+    filter?: string[];
 }
 
 export interface Paginate {
@@ -55,6 +65,7 @@ export interface Paginate {
         next: string | null;
         prev: string | null;
     };
+    attributes?: PageProps;
 }
 
 export interface OverlayProps {

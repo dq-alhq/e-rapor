@@ -15,9 +15,9 @@ class OperatorMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (auth()->user()->isOperator()) {
+        if (auth()->user()->isOperator() || auth()->user()->isKepsek()) {
             return $next($request);
         }
-        abort(403, "Maaf, anda bukan Operator.");
+        abort(403, "Maaf, anda tidak memiliki hak akses.");
     }
 }

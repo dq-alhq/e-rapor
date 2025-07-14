@@ -1,114 +1,116 @@
 import {
     Children,
+    isValidElement,
     type KeyboardEvent,
     type ReactNode,
     type Ref,
-    isValidElement,
     useEffect,
     useRef,
     useState
-} from 'react'
+} from 'react';
 
-import { IconChevronDown, IconX } from 'hq-icons'
-import type { ComboBoxProps, GroupProps, Key, ListBoxProps, Selection } from 'react-aria-components'
+import { IconChevronDown, IconX } from 'hq-icons';
+import type { ComboBoxProps, GroupProps, Key, ListBoxProps, Selection } from 'react-aria-components';
 import {
     Button,
     ComboBox,
+    composeRenderProps,
     Group,
     Input,
     ListBox,
     Tag,
     TagGroup,
-    TagList,
-    composeRenderProps
-} from 'react-aria-components'
+    TagList
+} from 'react-aria-components';
 
-import { cn, fuzzyMatch } from '@/lib/utils'
-import { Description, FieldGroup, type FieldProps, Label } from './form'
-import { ListBoxDetails, ListBoxItem, ListBoxSection } from './list-box'
-import { PopoverContent } from './popover'
+import { cn, fuzzyMatch } from '@/lib/utils';
+import { Description, FieldGroup, type FieldProps, Label } from './form';
+import { ListBoxDetails, ListBoxItem, ListBoxSection } from './list-box';
+import { PopoverContent } from './popover';
 
 interface MultiSelectProps<T>
     extends ListBoxProps<T>,
         Pick<ComboBoxProps<T & { selectedKeys: Selection }>, 'isRequired' | 'validate' | 'validationBehavior'>,
         FieldProps,
         Pick<GroupProps, 'isDisabled' | 'isInvalid'> {
-    className?: string
-    errorMessage?: string
-    maxItems?: number
-    ref?: Ref<HTMLDivElement>
+    className?: string;
+    errorMessage?: string;
+    maxItems?: number;
+    ref?: Ref<HTMLDivElement>;
 }
 
 function mapToNewObject<T extends object>(array: T[]): { id: T[keyof T]; textValue: T[keyof T] }[] {
     return array.map((item) => {
-        const idProperty = Object.keys(item).find((key) => key === 'id' || key === 'key')
-        const textProperty = Object.keys(item).find((key) => key !== 'id' && key !== 'key')
+        const idProperty = Object.keys(item).find((key) => key === 'id' || key === 'key');
+        const textProperty = Object.keys(item).find((key) => key !== 'id' && key !== 'key');
         return {
             id: item[idProperty as keyof T],
             textValue: item[textProperty as keyof T]
-        }
-    })
+        };
+    });
 }
 
 const MultiSelect = <T extends object>({
-    className,
-    maxItems = Number.POSITIVE_INFINITY,
-    children,
-    ref,
-    ...props
-}: MultiSelectProps<T>) => {
-    const triggerRef = useRef<HTMLDivElement>(null)
-    const inputRef = useRef<HTMLInputElement>(null)
-    const triggerButtonRef = useRef<HTMLButtonElement>(null)
-    const popoverRef = useRef<HTMLDivElement>(null)
-    const [inputValue, setInputValue] = useState('')
-    const [selectedKeys, onSelectionChange] = useState<Selection>(new Set(props.selectedKeys))
+                                           className,
+                                           maxItems = Number.POSITIVE_INFINITY,
+                                           children,
+                                           ref,
+                                           ...props
+                                       }: MultiSelectProps<T>) => {
+    const triggerRef = useRef<HTMLDivElement>(null);
+    const inputRef = useRef<HTMLInputElement>(null);
+    const triggerButtonRef = useRef<HTMLButtonElement>(null);
+    const popoverRef = useRef<HTMLDivElement>(null);
+    const [inputValue, setInputValue] = useState('');
+    const [selectedKeys, onSelectionChange] = useState<Selection>(new Set(props.selectedKeys));
 
-    const isMax = [...selectedKeys].length >= maxItems
+    const isMax = [...selectedKeys].length >= maxItems;
 
     useEffect(() => {
-        setInputValue('')
+        setInputValue('');
         return () => {
-            inputRef.current?.focus()
-        }
-    }, [props?.selectedKeys, selectedKeys])
+            // eslint-disable-next-line react-hooks/exhaustive-deps
+            inputRef.current?.focus();
+        };
+    }, [props?.selectedKeys, selectedKeys]);
 
     const addItem = (e: Key | null) => {
-        if (!e || isMax) return
-        onSelectionChange?.((s) => new Set([...s, e!]))
+        if (!e || isMax) return;
+        onSelectionChange?.((s) => new Set([...s, e!]));
         // @ts-expect-error incompatible type Key and Selection
-        props.onSelectionChange?.((s) => new Set([...s, e!]))
-    }
+        props.onSelectionChange?.((s) => new Set([...s, e!]));
+    };
 
     const removeItem = (e: Set<Key>) => {
-        onSelectionChange?.((s) => new Set([...s].filter((i) => i !== e.values().next().value)))
+        onSelectionChange?.((s) => new Set([...s].filter((i) => i !== e.values().next().value)));
         props.onSelectionChange?.(
             // @ts-expect-error incompatible type Key and Selection
             (s) => new Set([...s].filter((i) => i !== e.values().next().value))
-        )
-    }
+        );
+    };
 
     const onKeyDownCapture = (e: KeyboardEvent<HTMLInputElement>) => {
         if (e.key === 'Backspace' && inputValue === '') {
-            onSelectionChange?.((s) => new Set([...s].slice(0, -1)))
+            onSelectionChange?.((s) => new Set([...s].slice(0, -1)));
             // @ts-expect-error incompatible type Key and Selection
-            props.onSelectionChange?.((s) => new Set([...s].slice(0, -1)))
+            props.onSelectionChange?.((s) => new Set([...s].slice(0, -1)));
         }
-    }
+    };
 
     const parsedItems = props.items
         ? mapToNewObject(props.items as T[])
-        : mapToNewObject(Children.map(children as ReactNode, (child) => isValidElement(child) && child.props) as T[])
+        : mapToNewObject(Children.map(children as ReactNode, (child) => isValidElement(child) && child.props) as T[]);
 
     const availableItemsToSelect = props.items
         ? parsedItems.filter((item) => ![...selectedKeys].includes(item.id as Key))
-        : parsedItems
+        : parsedItems;
 
     const filteredChildren = props.items
         ? parsedItems.filter((item) => ![...selectedKeys].includes(item.id as Key))
         : Children.map(children as ReactNode, (child) => isValidElement(child) && child.props)?.filter(
-              (item: T & any) => ![...selectedKeys].includes(item.id)
-          )
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            (item: T & any) => ![...selectedKeys].includes(item.id)
+        );
     return (
         <Group
             className={composeRenderProps(className, (className) =>
@@ -128,9 +130,9 @@ const MultiSelect = <T extends object>({
             >
                 {({ isInvalid, isDisabled }) => (
                     <>
-                        <TagGroup onRemove={removeItem} aria-hidden aria-label='selected-items'>
+                        <TagGroup onRemove={removeItem} aria-hidden aria-label="selected-items">
                             <TagList
-                                className='flex flex-1 flex-wrap gap-1 pl-2 empty:pl-0'
+                                className="flex flex-1 flex-wrap gap-1 pl-2 empty:pl-0"
                                 items={[...selectedKeys].map((key) => ({
                                     id: key,
                                     textValue: parsedItems.find((item) => item.id === key)?.textValue as string
@@ -146,17 +148,17 @@ const MultiSelect = <T extends object>({
                                                     ? 'border-danger/70 bg-danger/10 text-danger'
                                                     : 'border-primary/70 bg-primary/10 text-primary',
                                                 isFocusVisible &&
-                                                    `ring-2 ${isInvalid ? 'ring-danger/70' : 'ring-primary/70'}`
+                                                `ring-2 ${isInvalid ? 'ring-danger/70' : 'ring-primary/70'}`
                                             )
                                         }
                                         textValue={item.textValue as string}
                                     >
                                         {item.textValue as string}
                                         <Button
-                                            slot='remove'
-                                            className='-mr-1 flex size-4 cursor-pointer items-center justify-center rounded-md pressed:bg-primary/70 pressed:text-primary-fg outline-hidden hover:bg-primary hover:text-primary-fg'
+                                            slot="remove"
+                                            className="-mr-1 flex size-4 cursor-pointer items-center justify-center rounded-md pressed:bg-primary/70 pressed:text-primary-fg outline-hidden hover:bg-primary hover:text-primary-fg"
                                         >
-                                            <IconX className='size-3 shrink-0' />
+                                            <IconX className="size-3 shrink-0" />
                                         </Button>
                                     </Tag>
                                 )}
@@ -170,13 +172,14 @@ const MultiSelect = <T extends object>({
                             isInvalid={isInvalid}
                             isReadOnly={isMax}
                             isDisabled={isDisabled}
-                            className='flex-1 text-sm/5'
-                            aria-label='Search'
+                            className="flex-1 text-sm/5"
+                            aria-label="Search"
                             onSelectionChange={addItem}
                             inputValue={inputValue}
-                            onInputChange={isMax ? () => {} : setInputValue}
+                            onInputChange={isMax ? () => {
+                            } : setInputValue}
                         >
-                            <div className='flex flex-row items-center'>
+                            <div className="flex flex-row items-center">
                                 <Input
                                     onFocus={() => triggerButtonRef.current?.click()}
                                     ref={inputRef}
@@ -185,17 +188,17 @@ const MultiSelect = <T extends object>({
                                         isMax
                                             ? 'Max items reached'
                                             : !availableItemsToSelect || !filteredChildren?.length
-                                              ? ''
-                                              : 'Pick some items'
+                                                ? ''
+                                                : 'Pick some items'
                                     }
-                                    className='w-full text-sm/7 outline-hidden'
+                                    className="w-full text-sm/7 outline-hidden"
                                 />
                                 <Button
                                     ref={triggerButtonRef}
-                                    aria-label='Chevron'
-                                    className='mr-2 ml-auto inline-flex w-auto flex-1 items-center justify-center rounded-md text-muted-fg outline-hidden'
+                                    aria-label="Chevron"
+                                    className="mr-2 ml-auto inline-flex w-auto flex-1 items-center justify-center rounded-md text-muted-fg outline-hidden"
                                 >
-                                    <IconChevronDown className='group-has-open/field:-rotate-180 size-4 transition' />
+                                    <IconChevronDown className="group-has-open/field:-rotate-180 size-4 transition" />
                                 </Button>
                             </div>
                             <PopoverContent
@@ -203,7 +206,7 @@ const MultiSelect = <T extends object>({
                                 respectScreen={false}
                                 showArrow={false}
                                 triggerRef={triggerRef}
-                                trigger='focus'
+                                trigger="focus"
                                 isPicker
                                 style={{
                                     minWidth: triggerRef.current?.offsetWidth,
@@ -211,12 +214,13 @@ const MultiSelect = <T extends object>({
                                 }}
                             >
                                 <ListBox
-                                    className='grid w-full grid-cols-[auto_1fr_1.5rem_0.5rem_auto] gap-y-1 overflow-y-auto rounded-md outline-hidden'
-                                    selectionMode='multiple'
+                                    className="grid w-full grid-cols-[auto_1fr_1.5rem_0.5rem_auto] gap-y-1 overflow-y-auto rounded-md outline-hidden"
+                                    selectionMode="multiple"
                                     renderEmptyState={() => <div>No Items</div>}
                                     items={(availableItemsToSelect as T[]) ?? props.items}
                                     {...props}
                                 >
+                                    {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
                                     {filteredChildren?.map((item: any) => (
                                         <MultiSelect.Item
                                             key={item.id as Key}
@@ -233,13 +237,13 @@ const MultiSelect = <T extends object>({
                 )}
             </FieldGroup>
             {props.description && <Description>{props.description}</Description>}
-            {props.errorMessage && <Description className='text-danger text-sm/5'>{props.errorMessage}</Description>}
+            {props.errorMessage && <Description className="text-danger text-sm/5">{props.errorMessage}</Description>}
         </Group>
-    )
-}
+    );
+};
 
-MultiSelect.Item = ListBoxItem
-MultiSelect.Section = ListBoxSection
-MultiSelect.ItemDetails = ListBoxDetails
+MultiSelect.Item = ListBoxItem;
+MultiSelect.Section = ListBoxSection;
+MultiSelect.ItemDetails = ListBoxDetails;
 
-export { MultiSelect }
+export { MultiSelect };

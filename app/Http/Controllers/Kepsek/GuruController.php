@@ -16,23 +16,31 @@ class GuruController extends Controller
      */
     public function index(Request $request)
     {
-        $search = $request->q ?? null;
+        $search = $request->search ?? null;
         $perPage = $request->perPage ?? 10;
+        $sort = $request->sort ?? 'id';
+        $dir = $request->dir ?? 'asc';
 
-        $gurus = Guru::query()
-            ->with(['wilayah'])
-            ->when($search, function ($query, $search) {
-                return $query->where('nama', 'like', "%$search%");
-            })
-            ->paginate($perPage);
+        $gurus = GuruResource::collection(
+            Guru::query()
+                ->when($search, function ($query, $search) {
+                    return $query->where('nama', 'like', "%$search%");
+                })
+                ->when($sort, function ($query, $sort) use ($dir) {
+                    return $query->orderBy($sort, $dir);
+                })
+                ->paginate($perPage))
+            ->additional([
+                'attributes' => [
+                    'search' => $search,
+                    'perPage' => $perPage,
+                    'sort' => $sort,
+                    'dir' => $dir,
+                ]
+            ]);
 
         return inertia('guru/index', [
-                'gurus' => fn() => GuruResource::collection($gurus),
-
-                'page_options' => [
-                    'search' => $search,
-                    'perPage' => $perPage
-                ],
+                'gurus' => fn() => $gurus
             ]
         );
     }

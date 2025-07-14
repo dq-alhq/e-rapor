@@ -33,14 +33,15 @@ class SiswaDetailsResource extends JsonResource
             'alamat_lengkap' => $this->alamat(),
             'avatar' => $this->user->avatar ? route('image', $this->user->avatar) : null,
 
-            'status_dalam_keluarga' => $this->statusDalamKeluarga(),
-            'anak_ke' => $this->anak_ke,
+            'kelas' => $this->kelasSekarang()->nama ?? null,
 
+            'status_dalam_keluarga' => $this->status_dalam_keluarga,
+            'anak_ke' => $this->anak_ke,
             'nama_ayah' => $this->nama_ayah,
             'pekerjaan_ayah' => $this->pekerjaan_ayah,
             'nama_ibu' => $this->nama_ibu,
             'pekerjaan_ibu' => $this->pekerjaan_ibu,
-            'nama_wali' => $this->nama_wali == $this->nama_ayah ? $this->nama_ayah . ' (Ayah)' : $this->nama_wali,
+            'nama_wali' => $this->nama_wali,
             'pekerjaan_wali' => $this->pekerjaan_wali,
             'telepon_wali' => $this->telepon_wali,
         ];

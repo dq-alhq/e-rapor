@@ -34,7 +34,7 @@ class GuruDetailsResource extends JsonResource
             'avatar' => $this->user->avatar ? route('image', $this->user->avatar) : null,
 
             'pembelajaran' => $this->mengajar()->groupBy('mapel'),
-            'roles' => $this->user->getRoles(),
+            'roles' => $this->getRoles(),
             'wali_kelas' => $this->waliKelas(),
             'pembina_ekskul' => $this->pembinaEkskul(),
         ];

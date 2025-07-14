@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Guru;
 use App\Models\Wilayah;
 use Illuminate\Http\Request;
 
@@ -12,6 +13,17 @@ Route::get('wilayah', function (Request $request) {
         ->limit(10)
         ->get();
     return response()->json($wilayah);
+});
+
+Route::get('guru', function (Request $request) {
+    $search = $request->q ?? null;
+    $guru = Guru::query()
+        ->when($search, function ($q) use ($search) {
+            $q->where('nama', 'like', "%$search%")->orWhere('id', 'like', "%$search%");
+        })
+        ->limit(10)
+        ->get();
+    return response()->json($guru);
 });
 
 

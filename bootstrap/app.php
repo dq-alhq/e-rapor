@@ -33,7 +33,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'kepsek' => KepsekMiddleware::class,
             'guru' => GuruMiddleware::class,
             'siswa' => SiswaMiddleware::class,
-            'opearator' => OperatorMiddleware::class,
+            'operator' => OperatorMiddleware::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {

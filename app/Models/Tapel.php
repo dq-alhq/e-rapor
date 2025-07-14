@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 
 class Tapel extends Model
 {
@@ -45,6 +46,11 @@ class Tapel extends Model
     public function kelas(): HasMany
     {
         return $this->hasMany(Kelas::class);
+    }
+
+    public function siswa(): HasManyThrough
+    {
+        return $this->hasManyThrough(AnggotaKelas::class, Kelas::class, 'tapel_id', 'kelas_id');
     }
 
     public function proyek(): HasMany

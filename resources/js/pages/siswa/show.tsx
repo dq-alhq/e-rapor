@@ -1,5 +1,6 @@
-import { Avatar, buttonStyle, Card, DL, Header, Link } from '@/components/ui';
+import { Avatar, Badge, buttonStyle, Card, DL, Header, Link } from '@/components/ui';
 import AppLayout from '@/layouts/app-layout';
+import { statusDalamKeluarga } from '@/lib/enums';
 import { formatDate } from '@/lib/utils';
 import { type BreadcrumbItem } from '@/types';
 import { Head } from '@inertiajs/react';
@@ -17,6 +18,9 @@ export default function SiswaShow({ siswa }: Props) {
                 <Card className="h-fit lg:col-span-1">
                     <Card.Content className="mt-6 flex flex-col items-center gap-2">
                         <Avatar shape="square" size="5xl" src={siswa.avatar || ''} alt={siswa.nama} />
+                        <div className="my-2 flex flex-wrap items-center justify-center gap-1 text-sm">
+                            <Badge variant="danger">{siswa.kelas}</Badge>
+                        </div>
                     </Card.Content>
                 </Card>
                 <Card className="h-fit lg:col-span-3">
@@ -52,12 +56,11 @@ export default function SiswaShow({ siswa }: Props) {
                             <DL.T>Telepon</DL.T>
                             <DL.D>{siswa.telepon}</DL.D>
                             <DL.T>Alamat</DL.T>
-                            {/* @ts-expect-error no-type */}
                             <DL.D>{siswa.alamat_lengkap}</DL.D>
-                            <DL.T>Status Dalam Keluarga</DL.T>
-                            <DL.D>{siswa.status_dalam_keluarga}</DL.D>
                             <DL.T>Anak Ke</DL.T>
                             <DL.D>{siswa.anak_ke}</DL.D>
+                            <DL.T>Status Dalam Keluarga</DL.T>
+                            <DL.D>{statusDalamKeluarga(siswa.status_dalam_keluarga)}</DL.D>
                         </DL>
                         <Header className="my-4">
                             <Header.Title>Data Orang Tua Siswa</Header.Title>

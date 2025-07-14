@@ -16,7 +16,7 @@ return new class extends Migration {
             $table->id();
             $table->integer('tahun');
             $table->enum('semester', ["1", "2"]);
-            $table->string('tempat_rapor');
+            $table->string('tempat_rapor')->nullable();
             $table->date('tanggal_rapor')->nullable();
             $table->boolean('aktif')->default(false);
             $table->timestamps();
