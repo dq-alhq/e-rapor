@@ -29,10 +29,10 @@ jobs:
         uses: oven-sh/setup-bun@v2
 
       - name: Install Node Dependencies
-        run: bun ci
+        run: npm ci
 
       - name: Build Assets
-        run: bun run build
+        run: npm run build
 
       - name: Install Dependencies
         run: composer install --no-interaction --prefer-dist --optimize-autoloader
