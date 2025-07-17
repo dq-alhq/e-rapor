@@ -10,6 +10,7 @@ interface Props {
 }
 
 export default function OperatorShow({ operator }: Props) {
+    console.log(operator);
     return (
         <>
             <Head title={operator.nama} />
@@ -52,7 +53,6 @@ export default function OperatorShow({ operator }: Props) {
                             <DL.T>Telepon</DL.T>
                             <DL.D>{operator.telepon}</DL.D>
                             <DL.T>Alamat</DL.T>
-                            {/* @ts-expect-error no-type */}
                             <DL.D>{operator.alamat_lengkap}</DL.D>
                         </DL>
                     </Card.Content>

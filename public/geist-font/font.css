@@ -1,0 +1,12 @@
+@font-face {
+    font-family: Geist;
+    src: url('geist.woff2') format('woff2');
+    font-style: normal;
+}
+
+@font-face {
+    font-family: Geist;
+    src: url('geist-italic.woff2') format('woff2');
+    font-style: italic;
+}
+

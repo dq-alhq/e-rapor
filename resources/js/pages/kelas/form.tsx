@@ -1,4 +1,4 @@
-import GuruSelect from '@/components/guru-select';
+import { SearchableSelect } from '@/components/searchable-select';
 import { Button, Form, Modal, Select, TextField } from '@/components/ui';
 import { wait } from '@/lib/utils';
 import { FormSetting, OverlayProps } from '@/types';
@@ -16,7 +16,7 @@ export default function KelasForm({ form, isOpen, setIsOpen, tapel_aktif }: Prop
         _method: method,
         nama: kelas.nama ?? '',
         tingkat: kelas.tingkat ?? '1',
-        wali_id: kelas.wali_id ?? '',
+        wali_id: kelas.wali_id || '',
     });
 
     function onSubmit(e: { preventDefault: () => void }) {
@@ -77,12 +77,13 @@ export default function KelasForm({ form, isOpen, setIsOpen, tapel_aktif }: Prop
                             errorMessage={errors.nama}
                             isRequired
                         />
-                        <GuruSelect
+                        <SearchableSelect
+                            data="guru"
                             className="col-span-full"
-                            name="wilayah_id"
+                            name="wali_id"
                             defaultSelectedKey={data.wali_id}
                             selectedKey={data.wali_id}
-                            onSelectionChange={(v) => setData('wali_id', v! as number)}
+                            onSelectionChange={(v) => setData('wali_id', v!)}
                             errorMessage={errors.wali_id}
                         />
                     </div>

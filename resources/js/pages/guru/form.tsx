@@ -1,6 +1,6 @@
+import { SearchableSelect } from '@/components/searchable-select';
 import { Button, buttonStyle, Card, DatePicker, Form, Link, Radio, RadioGroup, TextField } from '@/components/ui';
 import { UploadFoto } from '@/components/upload-foto';
-import WilayahSelect from '@/components/wilayah-select';
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem, FormSetting, SharedData } from '@/types';
 import { Head, useForm, usePage } from '@inertiajs/react';
@@ -143,7 +143,8 @@ export default function GuruForm({ guru, form }: Props) {
                                     onChange={(v) => setData('alamat', v)}
                                     errorMessage={errors.alamat}
                                 />
-                                <WilayahSelect
+                                <SearchableSelect
+                                    data="wilayah"
                                     className="col-span-full"
                                     name="wilayah_id"
                                     defaultSelectedKey={data.wilayah_id}

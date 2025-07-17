@@ -1,27 +1,24 @@
-import { Form, Link, Note } from "@/components/ui"
-import { Button } from "@/components/ui/button"
-import AuthLayout from "@/layouts/auth-layout"
-import { Head, useForm } from "@inertiajs/react"
-import type { FormEventHandler } from "react"
+import { Form, Link, Note } from '@/components/ui';
+import { Button } from '@/components/ui/button';
+import AuthLayout from '@/layouts/auth-layout';
+import { Head, useForm } from '@inertiajs/react';
+import type { FormEventHandler } from 'react';
 
 export default function VerifyEmail({ status }: { status?: string }) {
-    const { post, processing } = useForm({})
+    const { post, processing } = useForm({});
 
     const submit: FormEventHandler = (e) => {
-        e.preventDefault()
+        e.preventDefault();
 
-        post(route("verification.send"))
-    }
+        post(route('verification.send'));
+    };
 
     return (
         <>
             <Head title="Email verification" />
 
-            {status === "verification-link-sent" && (
-                <Note variant="success">
-                    A new verification link has been sent to the email address you provided during
-                    registration.
-                </Note>
+            {status === 'verification-link-sent' && (
+                <Note variant="success">A new verification link has been sent to the email address you provided during registration.</Note>
             )}
 
             <Form onSubmit={submit} className="space-y-6 text-center">
@@ -29,22 +26,14 @@ export default function VerifyEmail({ status }: { status?: string }) {
                     Resend verification email
                 </Button>
 
-                <Link
-                    href={route("logout")}
-                    routerOptions={{ method: "post" }}
-                    className="mx-auto block text-sm"
-                >
+                <Link href={route('logout')} routerOptions={{ method: 'post' }} className="mx-auto block text-sm">
                     Log out
                 </Link>
             </Form>
         </>
-    )
+    );
 }
 
 VerifyEmail.layout = (page: React.ReactNode) => (
-    <AuthLayout
-        title="Verify email"
-        description="Please verify your email address by clicking on the link we just emailed to you."
-        children={page}
-    />
-)
+    <AuthLayout title="Verify email" description="Please verify your email address by clicking on the link we just emailed to you." children={page} />
+);

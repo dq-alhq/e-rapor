@@ -37,7 +37,7 @@ export function NavUser({ showInfo = false, layout = 'sidebar' }: { showInfo?: b
                     <Menu.Label>Settings</Menu.Label>
                 </Menu.Item>
                 <Menu.Separator />
-                <Menu.Item href={route('logout')} onAction={handleLogout} routerOptions={{ method: 'post' }}>
+                <Menu.Item isDanger href={route('logout')} onAction={handleLogout} routerOptions={{ method: 'post' }}>
                     <LogOut />
                     <Menu.Label>Logout</Menu.Label>
                 </Menu.Item>

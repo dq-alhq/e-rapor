@@ -10,11 +10,12 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Laravel\Scout\Searchable;
 
 #[ObservedBy([GuruObserver::class])]
 class Guru extends Model
 {
-    use HasFactory, HasGuruRoles;
+    use HasFactory, HasGuruRoles, Searchable;
 
     /**
      * The attributes that are mass assignable.
@@ -47,6 +48,17 @@ class Guru extends Model
             'user_id' => 'integer',
             'tanggal_lahir' => 'date',
             'wilayah_id' => 'integer',
+        ];
+    }
+
+    public function toSearchableArray(): array
+    {
+        return [
+            'id' => $this->id,
+            'nama' => $this->nama,
+            'nip' => $this->nip,
+            'nuptk' => $this->nuptk,
+            'nik' => $this->nik
         ];
     }
 

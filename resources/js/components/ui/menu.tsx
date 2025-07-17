@@ -1,30 +1,32 @@
-import { IconCheck, IconChevronRight } from 'hq-icons';
-import type { ComponentPropsWithRef, CSSProperties } from 'react';
+import { IconCheck, IconChevronRight } from 'hq-icons'
+import type { CSSProperties, ComponentPropsWithRef } from 'react'
+import {
+    type ButtonProps,
+    type MenuProps,
+    type MenuSectionProps,
+    type MenuTriggerProps,
+    type PopoverProps,
+    type MenuItemProps as RACMenuItemProps,
+    composeRenderProps
+} from 'react-aria-components'
 import {
     Button,
-    type ButtonProps,
     Collection,
-    composeRenderProps,
     Header,
+    PopoverContext,
     Menu as RACMenu,
     MenuItem as RACMenuItem,
-    type MenuItemProps as RACMenuItemProps,
-    type MenuProps,
     MenuSection as RACMenuSection,
-    type MenuSectionProps,
     MenuTrigger as RACMenuTrigger,
-    type MenuTriggerProps,
-    PopoverContext,
-    type PopoverProps,
     SubmenuTrigger,
     useSlottedContext
-} from 'react-aria-components';
+} from 'react-aria-components'
 
-import { cn } from '@/lib/utils';
-import { headerStyle, itemStyle, ListBoxDetails, ListBoxLabel, ListBoxSeparator, sectionStyle } from './list-box';
-import { PopoverContent } from './popover';
+import { cn } from '@/lib/utils'
+import { ListBoxDetails, ListBoxLabel, ListBoxSeparator, headerStyle, itemStyle, sectionStyle } from './list-box'
+import { PopoverContent } from './popover'
 
-const Menu = ({ ...props }: MenuTriggerProps) => <RACMenuTrigger {...props} />;
+const Menu = ({ ...props }: MenuTriggerProps) => <RACMenuTrigger {...props} />
 
 interface MenuContentProps<T>
     extends MenuProps<T>,
@@ -39,15 +41,15 @@ interface MenuContentProps<T>
             | 'onOpenChange'
             | 'shouldFlip'
         > {
-    className?: string;
-    style?: CSSProperties;
-    respectScreen?: boolean;
+    className?: string
+    style?: CSSProperties
+    respectScreen?: boolean
 }
 
 const MenuContent = <T extends object>({ className, respectScreen = true, ...props }: MenuContentProps<T>) => {
-    const popoverContext = useSlottedContext(PopoverContext)!;
-    const isSubmenuTrigger = popoverContext?.trigger === 'SubmenuTrigger';
-    const optimalOffset = isSubmenuTrigger ? 0 : 8;
+    const popoverContext = useSlottedContext(PopoverContext)!
+    const isSubmenuTrigger = popoverContext?.trigger === 'SubmenuTrigger'
+    const optimalOffset = isSubmenuTrigger ? 0 : 8
     return (
         <PopoverContent
             showArrow={false}
@@ -63,15 +65,15 @@ const MenuContent = <T extends object>({ className, respectScreen = true, ...pro
                 {...props}
             />
         </PopoverContent>
-    );
-};
+    )
+}
 
 interface MenuItemProps extends RACMenuItemProps {
-    isDanger?: boolean;
+    isDanger?: boolean
 }
 
 const MenuItem = ({ className, isDanger = false, children, ...props }: MenuItemProps) => {
-    const textValue = props.textValue || (typeof children === 'string' ? children : undefined);
+    const textValue = props.textValue || (typeof children === 'string' ? children : undefined)
     return (
         <RACMenuItem
             className={composeRenderProps(className, (className) =>
@@ -89,14 +91,14 @@ const MenuItem = ({ className, isDanger = false, children, ...props }: MenuItemP
         >
             {(values) => (
                 <>
-                    {values.isSelected && <IconCheck className="mr-2 text-success" data-slot="checked" />}
+                    {values.isSelected && <IconCheck className='mr-2 text-success' data-slot='checked' />}
                     {typeof children === 'function' ? children(values) : children}
-                    {values.hasSubmenu && <IconChevronRight data-slot="chevron" className="ml-auto" />}
+                    {values.hasSubmenu && <IconChevronRight data-slot='chevron' className='ml-auto' />}
                 </>
             )}
         </RACMenuItem>
-    );
-};
+    )
+}
 
 const MenuHeader = ({ className, ...props }: ComponentPropsWithRef<typeof Header>) => (
     <Header
@@ -106,37 +108,37 @@ const MenuHeader = ({ className, ...props }: ComponentPropsWithRef<typeof Header
         )}
         {...props}
     />
-);
+)
 
 const MenuSection = <T extends object>({
-                                           className,
-                                           items,
-                                           children,
-                                           ...props
-                                       }: MenuSectionProps<T> & { title?: string }) => {
+    className,
+    items,
+    children,
+    ...props
+}: MenuSectionProps<T> & { title?: string }) => {
     return (
-        <RACMenuSection className={sectionStyle({ className })} {...props}>
+        <RACMenuSection className={sectionStyle({className})} {...props}>
             {'title' in props && <Header className={headerStyle()}>{props.title}</Header>}
             <Collection items={items}>{children}</Collection>
         </RACMenuSection>
-    );
-};
+    )
+}
 
-const MenuTrigger = (props: ButtonProps) => <Button {...props} />;
+const MenuTrigger = (props: ButtonProps) => <Button {...props} />
 
-const MenuLabel = ListBoxLabel;
-const MenuSeparator = ListBoxSeparator;
-const MenuDetails = ListBoxDetails;
+const MenuLabel = ListBoxLabel
+const MenuSeparator = ListBoxSeparator
+const MenuDetails = ListBoxDetails
 
-Menu.Trigger = MenuTrigger;
-Menu.Submenu = SubmenuTrigger;
-Menu.Item = MenuItem;
-Menu.Content = MenuContent;
-Menu.Header = MenuHeader;
-Menu.Section = MenuSection;
-Menu.Details = MenuDetails;
-Menu.Label = MenuLabel;
-Menu.Separator = MenuSeparator;
+Menu.Trigger = MenuTrigger
+Menu.Submenu = SubmenuTrigger
+Menu.Item = MenuItem
+Menu.Content = MenuContent
+Menu.Header = MenuHeader
+Menu.Section = MenuSection
+Menu.Details = MenuDetails
+Menu.Label = MenuLabel
+Menu.Separator = MenuSeparator
 
-export { Menu, MenuItem, MenuContent, MenuSection, MenuLabel, MenuSeparator, MenuDetails };
-export type { MenuContentProps };
+export { Menu, MenuItem, MenuContent, MenuSection, MenuLabel, MenuSeparator, MenuDetails }
+export type { MenuContentProps }

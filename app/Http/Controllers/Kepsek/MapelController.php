@@ -3,7 +3,11 @@
 namespace App\Http\Controllers\Kepsek;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\MapelDetailsResource;
+use App\Http\Resources\MapelResource;
+use App\Models\Kelas;
 use App\Models\Mapel;
+use App\Models\Pembelajaran;
 use Illuminate\Http\Request;
 
 class MapelController extends Controller
@@ -11,9 +15,37 @@ class MapelController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $search = $request->search ?? null;
+        $perPage = $request->perPage ?? 10;
+        $sort = $request->sort ?? 'urutan';
+        $dir = $request->dir ?? 'asc';
+
+        $mapels = MapelResource::collection(
+            Mapel::query()
+                ->with('kelompokMapel')
+                ->withCount(['guru'])
+                ->when($search, function ($query, $search) {
+                    return $query->where('nama', 'like', "%$search%")->orWhere('singkatan', 'like', "%$search%");
+                })
+                ->when($sort, function ($query, $sort) use ($dir) {
+                    return $query->orderBy($sort, $dir);
+                })
+                ->paginate($perPage)
+        )->additional([
+            'attributes' => [
+                'search' => $search,
+                'perPage' => $perPage,
+                'sort' => $sort,
+                'dir' => $dir,
+            ]
+        ]);
+
+        return inertia('mapel/index', [
+                'mapels' => fn() => $mapels,
+            ]
+        );
     }
 
     /**
@@ -21,7 +53,15 @@ class MapelController extends Controller
      */
     public function create()
     {
-        //
+        return inertia('mapel/form', [
+                'form' => [
+                    'data' => new Mapel(),
+                    'title' => 'Buat Mapel Baru',
+                    'url' => route('mapel.store'),
+                    'method' => 'post'
+                ]
+            ]
+        );
     }
 
     /**
@@ -29,15 +69,27 @@ class MapelController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'kelompok_mapel_id' => 'required|exists:kelompok_mapels,id',
+            'nama' => 'required|string|max:128',
+            'singkatan' => 'required|string|size:3|alpha|unique:mapels,singkatan|uppercase',
+        ]);
+
+        Mapel::create($validated);
+        toast('Mata Pelajaran Berhasil Ditambahkan');
+        return to_route('mapel.index');
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Mapel $mapel)
+    public function show(Mapel $mapel, Kelas $kelas = null, string $guru = null)
     {
-        //
+        return inertia('mapel/show', [
+            'mapel' => MapelDetailsResource::make($mapel->load(['kelompokMapel', 'guru', 'kelas'])),
+            'kelas' => $kelas ?? new Kelas(),
+            'guru' => $guru
+        ]);
     }
 
     /**
@@ -45,7 +97,14 @@ class MapelController extends Controller
      */
     public function edit(Mapel $mapel)
     {
-        //
+        return inertia('mapel/form', [
+                'form' => [
+                    'data' => $mapel,
+                    'title' => 'Edit Mapel',
+                    'url' => route('mapel.update', $mapel->id),
+                    'method' => 'put'
+                ]]
+        );
     }
 
     /**
@@ -53,7 +112,15 @@ class MapelController extends Controller
      */
     public function update(Request $request, Mapel $mapel)
     {
-        //
+        $validated = $request->validate([
+            'kelompok_mapel_id' => 'required|exists:kelompok_mapels,id',
+            'nama' => 'required|string|max:128',
+            'singkatan' => 'required|string|size:3|alpha|unique:mapels,singkatan,' . $mapel->id . '|uppercase',
+        ]);
+
+        $mapel->update($validated);
+        toast('Mata Pelajaran Berhasil Diubah');
+        return to_route('mapel.index');
     }
 
     /**
@@ -62,5 +129,38 @@ class MapelController extends Controller
     public function destroy(Mapel $mapel)
     {
         //
+    }
+
+    public function pembelajaran(Mapel $mapel, Kelas $kelas)
+    {
+        $guru = Pembelajaran::query()
+            ->where('mapel_id', $mapel->id)
+            ->where('kelas_id', $kelas->id)
+            ->first()?->guru_id;
+
+        return $this->show($mapel, $kelas, $guru);
+    }
+
+    public function updatePembelajaran(Mapel $mapel, Kelas $kelas)
+    {
+        $validated = request()->validate([
+            'guru_id' => 'required|exists:gurus,id',
+        ]);
+        $pembelajaran = Pembelajaran::query()
+            ->where('mapel_id', $mapel->id)
+            ->where('kelas_id', $kelas->id)
+            ->first();
+
+        if ($pembelajaran) {
+            $pembelajaran->update($validated);
+        } else {
+            Pembelajaran::create([
+                'mapel_id' => $mapel->id,
+                'kelas_id' => $kelas->id,
+                'guru_id' => $validated['guru_id']
+            ]);
+        }
+
+        toast('Pembelajaran Berhasil Diubah');
     }
 }

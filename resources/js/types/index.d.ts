@@ -27,7 +27,7 @@ export interface NavItem {
 
 export interface SharedData {
     auth: Auth;
-    ziggy: Config & { location: string; prev_url: string };
+    ziggy: Config & { location: string; prev_url: string; url: string };
     status?: string;
     toast?: ToastProps;
     sekolah?: model.Sekolah;

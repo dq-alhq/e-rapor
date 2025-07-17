@@ -3,64 +3,31 @@
 namespace App\Http\Controllers\Kepsek;
 
 use App\Http\Controllers\Controller;
+use App\Models\Kelas;
+use App\Models\Mapel;
 use App\Models\Pembelajaran;
 use Illuminate\Http\Request;
 
 class PembelajaranController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function createByMapel(Mapel $mapel, Kelas $kelas)
     {
-        //
+        $guru = Pembelajaran::query()->where('mapel_id', $mapel->id)->where('kelas_id', $kelas->id)->first()->guru->id ?? null;
+        return MapelController::show($mapel, $kelas, $guru);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function updateByMapel(Request $request, Mapel $mapel)
     {
-        //
+        Pembelajaran::query()->where('mapel_id', $mapel->id)->delete();
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    public function createByKelas(Request $request, Kelas $kelas)
     {
-        //
+//
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Pembelajaran $pembelajaran)
+    public function updateByKelas(Request $request, Kelas $kelas)
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Pembelajaran $pembelajaran)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Pembelajaran $pembelajaran)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Pembelajaran $pembelajaran)
-    {
-        //
+//
     }
 }

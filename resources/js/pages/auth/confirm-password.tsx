@@ -1,24 +1,22 @@
 // Components
-import { Head, useForm } from "@inertiajs/react"
-import type { FormEventHandler } from "react"
+import { Head, useForm } from '@inertiajs/react';
+import type { FormEventHandler } from 'react';
 
-import { Button, Form, TextField } from "@/components/ui"
-import AuthLayout from "@/layouts/auth-layout"
+import { Button, Form, TextField } from '@/components/ui';
+import AuthLayout from '@/layouts/auth-layout';
 
 export default function ConfirmPassword() {
-    const { data, setData, post, processing, errors, reset } = useForm<
-        Required<{ password: string }>
-    >({
-        password: "",
-    })
+    const { data, setData, post, processing, errors, reset } = useForm<Required<{ password: string }>>({
+        password: '',
+    });
 
     const submit: FormEventHandler = (e) => {
-        e.preventDefault()
+        e.preventDefault();
 
-        post(route("password.confirm"), {
-            onFinish: () => reset("password"),
-        })
-    }
+        post(route('password.confirm'), {
+            onFinish: () => reset('password'),
+        });
+    };
 
     return (
         <>
@@ -34,7 +32,7 @@ export default function ConfirmPassword() {
                     autoComplete="current-password"
                     value={data.password}
                     autoFocus
-                    onChange={(v) => setData("password", v)}
+                    onChange={(v) => setData('password', v)}
                     errorMessage={errors.password}
                 />
 
@@ -43,7 +41,7 @@ export default function ConfirmPassword() {
                 </Button>
             </Form>
         </>
-    )
+    );
 }
 
 ConfirmPassword.layout = (page: React.ReactNode) => (
@@ -52,4 +50,4 @@ ConfirmPassword.layout = (page: React.ReactNode) => (
         description="This is a secure area of the application. Please confirm your password before continuing."
         children={page}
     />
-)
+);

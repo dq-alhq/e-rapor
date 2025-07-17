@@ -59,6 +59,6 @@ class Operator extends Model
 
     public function alamat(): string
     {
-        return $this->alamat . ', ' . $this->wilayah->nama;
+        return $this->wilayah ? $this->alamat . ', ' . $this->wilayah->name : $this->alamat;
     }
 }

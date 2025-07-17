@@ -1,14 +1,16 @@
-import type { ComponentPropsWithRef } from 'react'
+import { type ComponentPropsWithRef, use } from 'react'
 
-import { getLocalTimeZone, today } from '@internationalized/date'
+import { type CalendarDate, getLocalTimeZone, today } from '@internationalized/date'
+import { useDateFormatter } from '@react-aria/i18n'
 import { IconChevronLeft, IconChevronRight } from 'hq-icons'
-import type { CalendarProps, DateValue, RangeCalendarProps } from 'react-aria-components'
+import type { CalendarProps, CalendarState, DateValue, RangeCalendarProps } from 'react-aria-components'
 import {
     Button,
     CalendarCell,
     CalendarGrid,
     CalendarGridBody,
     CalendarHeaderCell,
+    CalendarStateContext,
     Heading,
     Calendar as RACCalendar,
     CalendarGridHeader as RACCalendarGridHeader,
@@ -17,6 +19,7 @@ import {
 } from 'react-aria-components'
 
 import { cn } from '@/lib/utils'
+import { Menu } from './menu'
 
 const Calendar = <T extends DateValue>(props: CalendarProps<T>) => {
     const now = today(getLocalTimeZone())
@@ -51,7 +54,7 @@ const RangeCalendar = <T extends DateValue>({ visibleDuration = { months: 1 }, .
     const now = today(getLocalTimeZone())
     return (
         <RACRangeCalendar visibleDuration={visibleDuration} {...props}>
-            <CalendarHeader />
+            <CalendarHeader isRange />
             <div className='grid gap-2 overflow-auto md:flex'>
                 {Array.from({ length: visibleDuration?.months ?? 1 }).map((_, index) => {
                     const id = index + 1
@@ -89,8 +92,10 @@ const RangeCalendar = <T extends DateValue>({ visibleDuration = { months: 1 }, .
     )
 }
 
-const CalendarHeader = ({ className, ...props }: ComponentPropsWithRef<'header'> & { isRange?: boolean }) => {
+const CalendarHeader = ({ className, isRange, ...props }: ComponentPropsWithRef<'header'> & { isRange?: boolean }) => {
     const { direction } = useLocale()
+    const state = use(CalendarStateContext)!
+
     return (
         <header
             slot='calendar-header'
@@ -103,7 +108,14 @@ const CalendarHeader = ({ className, ...props }: ComponentPropsWithRef<'header'>
             >
                 {direction === 'rtl' ? <IconChevronRight /> : <IconChevronLeft />}
             </Button>
-            <Heading className='font-normal text-sm' />
+            {isRange ? (
+                <Heading className='font-normal text-sm' />
+            ) : (
+                <div className='flex items-center'>
+                    <SelectMonth state={state} />
+                    <SelectYear state={state} />
+                </div>
+            )}
             <Button
                 className='inline-flex size-7 shrink-0 items-center justify-center rounded-md border border-muted/40 bg-bg pressed:bg-muted/50 text-muted-fg shadow-sm outline-hidden hover:bg-muted/40 focus-visible:ring-2 focus-visible:ring-ring'
                 slot='next'
@@ -123,6 +135,83 @@ const CalendarGridHeader = () => {
                 </CalendarHeaderCell>
             )}
         </RACCalendarGridHeader>
+    )
+}
+
+const SelectMonth = ({ state }: { state: CalendarState }) => {
+    const months = []
+
+    const formatter = useDateFormatter({
+        month: 'long',
+        timeZone: state.timeZone
+    })
+
+    const numMonths = state.focusedDate.calendar.getMonthsInYear(state.focusedDate)
+    for (let i = 1; i <= numMonths; i++) {
+        const date = state.focusedDate.set({ month: i })
+        months.push(formatter.format(date.toDate(state.timeZone)))
+    }
+    const selectedMonth = state.focusedDate.month
+
+    return (
+        <Menu aria-label='Select month'>
+            <Menu.Trigger className='p-0.5 text-sm outline-primary' slot={null}>
+                {months[selectedMonth - 1]}
+            </Menu.Trigger>
+            <Menu.Content
+                selectionMode='single'
+                selectedKeys={[selectedMonth]}
+                onSelectionChange={(v) => state.setFocusedDate(state.focusedDate.set({ month: Number([...v][0]) }))}
+                items={months.map((month, i) => ({ id: i + 1, textValue: month }))}
+            >
+                {(item) => (
+                    <Menu.Item key={item.id} id={item.id} textValue={item.textValue}>
+                        <Menu.Label>{item.textValue}</Menu.Label>
+                    </Menu.Item>
+                )}
+            </Menu.Content>
+        </Menu>
+    )
+}
+
+const SelectYear = ({ state }: { state: CalendarState }) => {
+    const years: { value: CalendarDate; formatted: string }[] = []
+    const formatter = useDateFormatter({
+        year: 'numeric',
+        timeZone: state.timeZone
+    })
+
+    for (let i = -20; i <= 20; i++) {
+        const date = state.focusedDate.add({ years: i })
+        years.push({
+            value: date,
+            formatted: formatter.format(date.toDate(state.timeZone))
+        })
+    }
+
+    const selectedYear = state.focusedDate.year
+
+    return (
+        <Menu>
+            <Menu.Trigger className='p-0.5 text-sm outline-primary' slot={null}>
+                {years[selectedYear - years[0].value.year].formatted}
+            </Menu.Trigger>
+            <Menu.Content
+                aria-label='Select year'
+                selectedKeys={[20]}
+                selectionMode='single'
+                onSelectionChange={(value) => {
+                    state.setFocusedDate(state.focusedDate.set({ year: years[Number([...value][0])].value.year }))
+                }}
+                items={years.map((year, i) => ({ id: i, textValue: year.formatted }))}
+            >
+                {(item) => (
+                    <Menu.Item key={item.id} id={item.id} textValue={item.textValue}>
+                        <Menu.Label>{item.textValue}</Menu.Label>
+                    </Menu.Item>
+                )}
+            </Menu.Content>
+        </Menu>
     )
 }
 

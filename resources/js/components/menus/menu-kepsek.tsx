@@ -34,7 +34,7 @@ const masterDataMenu: NavItem[] = [
     },
     {
         title: 'Mata Pelajaran',
-        href: '/kepsek/mapel',
+        href: route('mapel.index'),
         icon: IconBookCopy,
     },
     {

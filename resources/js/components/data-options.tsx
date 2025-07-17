@@ -18,9 +18,10 @@ interface Props {
     className?: string;
     attributes?: PageProps;
     filters?: { id: string; label: string }[];
+    perPages?: { value: number; label: string }[];
 }
 
-export default function DataOptions({ className, attributes, filters }: Props) {
+export default function DataOptions({ className, attributes, filters, perPages = PerPages }: Props) {
     const [query, setQuery] = useState<{
         search: string;
         perPage: number;
@@ -61,7 +62,7 @@ export default function DataOptions({ className, attributes, filters }: Props) {
                 placeholder="10"
                 className="w-fit"
                 aria-label="Per Page"
-                items={PerPages}
+                items={perPages}
                 selectedKey={query.perPage}
                 onSelectionChange={(v) => onChange('perPage', v!)}
             >

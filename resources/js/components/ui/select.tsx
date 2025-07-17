@@ -62,7 +62,7 @@ const Select = <T extends object>({
             {...props}
         >
             {label && <Label>{label}</Label>}
-            <Button className={cn(fieldGroupStyle(), 'w-full gap-x-2 p-2 outline-hidden text-base sm:text-sm')}>
+            <Button className={fieldGroupStyle({className:'w-full gap-x-2 p-2 outline-hidden text-base sm:text-sm'})}>
                 {props.prefix ? <span className="ml-2 text-muted-fg has-[button]:ml-0">{props.prefix}</span> : null}
                 <SelectValue
                     className="**:data-avatar:-mx-0.5 whitespace-nowrap truncate grid grid-cols-[auto_1fr] items-center text-base **:data-[slot=icon]:mr-2 **:data-avatar:mr-2 **:data-[slot=description]:hidden **:data-avatar:size-6 sm:text-sm" />

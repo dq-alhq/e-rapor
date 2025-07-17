@@ -1,4 +1,6 @@
 import { Select, SelectProps } from '@/components/ui';
+import { SharedData } from '@/types';
+import { usePage } from '@inertiajs/react';
 import { useAsyncList } from '@react-stately/data';
 
 interface item {
@@ -7,9 +9,11 @@ interface item {
 }
 
 export default function GuruSelect(props: Omit<SelectProps<item>, 'children'>) {
+    const { url } = usePage<SharedData>().props.ziggy;
+
     const list = useAsyncList<item>({
         async load({ signal, filterText }) {
-            const res = await fetch(`${import.meta.env.VITE_APP_URL}/api/guru?q=${filterText || props.selectedKey}`, { signal });
+            const res = await fetch(`${url}/api/guru?q=${filterText}`, { signal });
             const json = await res.json();
 
             return {

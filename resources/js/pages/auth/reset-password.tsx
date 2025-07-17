@@ -1,52 +1,42 @@
-import { Head, useForm } from "@inertiajs/react"
-import type { FormEventHandler } from "react"
+import { Head, useForm } from '@inertiajs/react';
+import type { FormEventHandler } from 'react';
 
-import { Button, Form, TextField } from "@/components/ui"
-import AuthLayout from "@/layouts/auth-layout"
+import { Button, Form, TextField } from '@/components/ui';
+import AuthLayout from '@/layouts/auth-layout';
 
 interface ResetPasswordProps {
-    token: string
-    email: string
+    token: string;
+    email: string;
 }
 
 type ResetPasswordForm = {
-    token: string
-    email: string
-    password: string
-    password_confirmation: string
-}
+    token: string;
+    email: string;
+    password: string;
+    password_confirmation: string;
+};
 
 export default function ResetPassword({ token, email }: ResetPasswordProps) {
-    const { data, setData, post, processing, errors, reset } = useForm<Required<ResetPasswordForm>>(
-        {
-            token: token,
-            email: email,
-            password: "",
-            password_confirmation: "",
-        },
-    )
+    const { data, setData, post, processing, errors, reset } = useForm<Required<ResetPasswordForm>>({
+        token: token,
+        email: email,
+        password: '',
+        password_confirmation: '',
+    });
 
     const submit: FormEventHandler = (e) => {
-        e.preventDefault()
-        post(route("password.store"), {
-            onFinish: () => reset("password", "password_confirmation"),
-        })
-    }
+        e.preventDefault();
+        post(route('password.store'), {
+            onFinish: () => reset('password', 'password_confirmation'),
+        });
+    };
 
     return (
         <>
             <Head title="Reset password" />
 
             <Form onSubmit={submit} className="space-y-6" validationErrors={errors}>
-                <TextField
-                    label="Email address"
-                    id="email"
-                    type="email"
-                    name="email"
-                    autoComplete="email"
-                    value={data.email}
-                    isReadOnly
-                />
+                <TextField label="Email address" id="email" type="email" name="email" autoComplete="email" value={data.email} isReadOnly />
                 <TextField
                     label="Password"
                     id="password"
@@ -55,7 +45,7 @@ export default function ResetPassword({ token, email }: ResetPasswordProps) {
                     autoComplete="new-password"
                     value={data.password}
                     autoFocus
-                    onChange={(v) => setData("password", v)}
+                    onChange={(v) => setData('password', v)}
                     placeholder="Password"
                     errorMessage={errors.password}
                 />
@@ -66,28 +56,19 @@ export default function ResetPassword({ token, email }: ResetPasswordProps) {
                     name="password_confirmation"
                     autoComplete="new-password"
                     value={data.password_confirmation}
-                    onChange={(v) => setData("password_confirmation", v)}
+                    onChange={(v) => setData('password_confirmation', v)}
                     placeholder="Confirm password"
                     errorMessage={errors.password_confirmation}
                 />
 
-                <Button
-                    type="submit"
-                    className="mt-4 w-full"
-                    isPending={processing}
-                    isDisabled={processing}
-                >
+                <Button type="submit" className="mt-4 w-full" isPending={processing} isDisabled={processing}>
                     Reset password
                 </Button>
             </Form>
         </>
-    )
+    );
 }
 
 ResetPassword.layout = (page: React.ReactNode) => (
-    <AuthLayout
-        title="Reset password"
-        description="Please enter your new password below"
-        children={page}
-    />
-)
+    <AuthLayout title="Reset password" description="Please enter your new password below" children={page} />
+);

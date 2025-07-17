@@ -34,14 +34,18 @@ Route::middleware(['auth', 'operator'])->group(function () {
     Route::resource('tapel', Controllers\Kepsek\TapelController::class);
     Route::put('tapel/{tapel}/aktif', [Controllers\Kepsek\TapelController::class, 'aktif'])->name('tapel.aktif');
     Route::resource('kelas', Controllers\Kepsek\KelasController::class);
-
     Route::resource('mapel', Controllers\Kepsek\MapelController::class);
+
+    Route::get('/pembelajaran/{mapel}/{kelas}', [Controllers\Kepsek\MapelController::class, 'pembelajaran'])->name('pembelajaran.mapel');
+    Route::put('/pembelajaran/{mapel}/{kelas}', [Controllers\Kepsek\MapelController::class, 'updatePembelajaran']);
+    Route::get('/pembelajaran/{kelas}', [Controllers\Kepsek\PembelajaranController::class, 'createByKelas'])->name('pembelajaran.kelas');
+    Route::put('/pembelajaran/{kelas}', [Controllers\Kepsek\PembelajaranController::class, 'updateByKelas']);
+
     Route::resource('siswa', Controllers\Kepsek\SiswaController::class);
     Route::resource('guru', Controllers\Kepsek\GuruController::class);
     Route::resource('operator', Controllers\Kepsek\OperatorController::class);
     Route::resource('ekskul', Controllers\Kepsek\EkskulController::class);
     Route::resource('proyek', Controllers\Kepsek\ProyekController::class);
-    Route::resource('pembelajaran', Controllers\Kepsek\PembelajaranController::class);
     Route::resource('penilaian', Controllers\Kepsek\PenilaianController::class);
 });
 

@@ -2,9 +2,13 @@
 
 namespace App\Http\Resources;
 
+use App\Models\Operator;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
+/**
+ * @mixin Operator
+ */
 class OperatorDetailsResource extends JsonResource
 {
     /**
