@@ -22,7 +22,7 @@ export default function Mapel({ mapels }: Props) {
             <Head title="Data Mapel" />
             <div className="flex h-[calc(100vh-4.1rem)] flex-1 flex-col rounded-xl p-6">
                 <Header className="mb-6">
-                    <Header.Title>Daftar Mapel</Header.Title>
+                    <Header.Title>Daftar Mata Pelajaran</Header.Title>
                     <Header.Description>Yang diajarkan pada Sekolah ini</Header.Description>
                     <Header.Action>
                         <Link href={route('mapel.create')} className={buttonStyle({ size: 'sm' })}>

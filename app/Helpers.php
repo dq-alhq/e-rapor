@@ -174,6 +174,47 @@ if (!function_exists('removeGelar')) {
 if (!function_exists('tapelAktif')) {
     function tapelAktif(): int
     {
-        return \App\Models\Tapel::where('aktif', true)->first()->id;
+        return \App\Models\Tapel::query()->where('aktif', true)->first()->id;
     }
 }
+
+if (!function_exists('opsiTingkat')) {
+    function opsiTingkat(): array
+    {
+        $jenjang = \App\Models\Sekolah::query()->first()->jenjang;
+        $opsiTingkat = [];
+        switch ($jenjang) {
+            case 'SD/MI':
+                $opsiTingkat = [1, 2, 3, 4, 5, 6];
+                break;
+            case 'SMP/MTs':
+                $opsiTingkat = [7, 8, 9];
+                break;
+            case 'SMA/MA/SMK':
+                $opsiTingkat = [10, 11, 12];
+                break;
+        }
+        return $opsiTingkat;
+    }
+}
+if (!function_exists('opsiAngkatan')) {
+    function opsiAngkatan(): array
+    {
+        $tahun_sekarang = \App\Models\Tapel::find(tapelAktif())->tahun;
+        return [
+            $tahun_sekarang - 2,
+            $tahun_sekarang - 1,
+            $tahun_sekarang,
+        ];
+    }
+}
+
+
+if (!function_exists('hapusFile')) {
+    function hapusFile(string $path): int
+    {
+        return file_exists(storage_path('app/private/' . $path)) && unlink(storage_path('app/private/' . $path));
+    }
+}
+
+

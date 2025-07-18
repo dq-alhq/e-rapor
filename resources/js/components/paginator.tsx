@@ -6,16 +6,25 @@ import { Paginate } from '@/types';
 interface PaginateProps extends Paginate {
     className?: string;
     only?: string[];
+    showInfo?: boolean;
 }
 
-export default function Paginator({ className, only, meta, links }: PaginateProps) {
+export default function Paginator({ className, only, meta, links, showInfo = true }: PaginateProps) {
     const isMobile = useIsMobile();
     const routerOptions = { only: only, preserveScroll: true, preserveState: true };
     return (
-        <div className={cn('mt-6 flex w-full flex-col-reverse items-center gap-3 pb-6 xl:flex-row xl:justify-between', className)}>
-            <div>
-                Menampilkan {meta.from} - {meta.to} dari {meta.total}
-            </div>
+        <div
+            className={cn(
+                'flex w-full justify-center',
+                showInfo && 'mt-6 flex-col-reverse items-center gap-3 pb-6 xl:flex-row xl:justify-between',
+                className,
+            )}
+        >
+            {showInfo && (
+                <div>
+                    Menampilkan {meta.from} - {meta.to} dari {meta.total}
+                </div>
+            )}
             <div>
                 <Pagination>
                     <Pagination.Item routerOptions={routerOptions} slot="first" isDisabled={meta.current_page === 1} href={links.first ?? '#'} />

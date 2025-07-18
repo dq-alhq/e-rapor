@@ -56,7 +56,6 @@ Route::get('kelompok-mapel', function (Request $request) {
     return response()->json($data->map(fn($d) => ['id' => $d->id, 'label' => $d->nama]));
 });
 
-
 Route::get('/image/{path}', function ($path) {
     $fullPath = storage_path('app/private/' . $path);
 

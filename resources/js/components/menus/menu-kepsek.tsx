@@ -39,7 +39,7 @@ const masterDataMenu: NavItem[] = [
     },
     {
         title: 'Ekstrakurikuler',
-        href: '/kepsek/ekskul',
+        href: route('ekskul.index'),
         icon: IconBoxes,
     },
 ];
@@ -101,16 +101,16 @@ const proyekMenu: NavItem[] = [
 export const MenuKepsek = ({ pathname }: { pathname: string }) => {
     return (
         <>
-            <Sidebar.Section title="Master Data">
-                {masterDataMenu.map((item) => (
+            <Sidebar.Section title="Manajemen Pengguna">
+                {manajemenPenggunaMenu.map((item) => (
                     <Sidebar.Item key={item.title} href={item.href} isCurrent={pathname.startsWith(item.href)}>
                         {item.icon && <item.icon />}
                         <Sidebar.Label>{item.title}</Sidebar.Label>
                     </Sidebar.Item>
                 ))}
             </Sidebar.Section>
-            <Sidebar.Section title="Manajemen Pengguna">
-                {manajemenPenggunaMenu.map((item) => (
+            <Sidebar.Section title="Master Data">
+                {masterDataMenu.map((item) => (
                     <Sidebar.Item key={item.title} href={item.href} isCurrent={pathname.startsWith(item.href)}>
                         {item.icon && <item.icon />}
                         <Sidebar.Label>{item.title}</Sidebar.Label>

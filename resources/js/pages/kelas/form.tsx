@@ -1,17 +1,17 @@
 import { SearchableSelect } from '@/components/searchable-select';
 import { Button, Form, Modal, Select, TextField } from '@/components/ui';
 import { wait } from '@/lib/utils';
-import { FormSetting, OverlayProps } from '@/types';
-import { router, useForm } from '@inertiajs/react';
+import { FormSetting, OverlayProps, SharedData } from '@/types';
+import { router, useForm, usePage } from '@inertiajs/react';
 import { IconSave } from 'hq-icons';
 
 interface Props extends OverlayProps {
-    form: FormSetting & { data: model.Kelas };
+    form: FormSetting & { data: model.Kelas; options: number[] };
     tapel_aktif: model.Tapel;
 }
 
 export default function KelasForm({ form, isOpen, setIsOpen, tapel_aktif }: Props) {
-    const { data: kelas, method, url } = form;
+    const { data: kelas, method, url, options } = form;
     const { data, setData, post, processing, errors } = useForm({
         _method: method,
         nama: kelas.nama ?? '',
@@ -26,8 +26,10 @@ export default function KelasForm({ form, isOpen, setIsOpen, tapel_aktif }: Prop
 
     function onClose() {
         setIsOpen(false);
-        wait(300).then(() => router.get(route('kelas.index')));
+        wait(300).then(() => router.get(prev_url ?? route('kelas.index')));
     }
+
+    const { prev_url } = usePage<SharedData>().props.ziggy;
 
     return (
         <Modal.Content isOpen={isOpen} onOpenChange={onClose}>
@@ -48,24 +50,18 @@ export default function KelasForm({ form, isOpen, setIsOpen, tapel_aktif }: Prop
                             className="col-span-full md:col-span-1"
                             label="Tingkat"
                             name="tingkat"
-                            autoFocus
-                            selectedKey={data.tingkat.toString()}
-                            onSelectionChange={(v) => setData('tingkat', v! as number)}
+                            isDisabled={method == 'put'}
+                            selectedKey={data.tingkat}
+                            onSelectionChange={(v) => setData('tingkat', Number(v!))}
                             errorMessage={errors.tingkat}
                             isRequired
+                            placeholder="Tingkat"
                         >
-                            <Select.Item id={'1'}>1</Select.Item>
-                            <Select.Item id={'2'}>2</Select.Item>
-                            <Select.Item id={'3'}>3</Select.Item>
-                            <Select.Item id={'4'}>4</Select.Item>
-                            <Select.Item id={'5'}>5</Select.Item>
-                            <Select.Item id={'6'}>6</Select.Item>
-                            <Select.Item id={'7'}>7</Select.Item>
-                            <Select.Item id={'8'}>8</Select.Item>
-                            <Select.Item id={'9'}>9</Select.Item>
-                            <Select.Item id={'10'}>10</Select.Item>
-                            <Select.Item id={'11'}>11</Select.Item>
-                            <Select.Item id={'12'}>12</Select.Item>
+                            {options.map((option) => (
+                                <Select.Item key={option} id={option}>
+                                    <Select.Label>{option}</Select.Label>
+                                </Select.Item>
+                            ))}
                         </Select>
                         <TextField
                             className="col-span-full md:col-span-3"
@@ -80,6 +76,7 @@ export default function KelasForm({ form, isOpen, setIsOpen, tapel_aktif }: Prop
                         <SearchableSelect
                             data="guru"
                             className="col-span-full"
+                            label="Wali Kelas"
                             name="wali_id"
                             defaultSelectedKey={data.wali_id}
                             selectedKey={data.wali_id}

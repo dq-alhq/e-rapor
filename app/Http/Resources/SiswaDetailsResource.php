@@ -33,7 +33,7 @@ class SiswaDetailsResource extends JsonResource
             'alamat_lengkap' => $this->alamat(),
             'avatar' => $this->user->avatar ? route('image', $this->user->avatar) : null,
 
-            'kelas' => $this->kelasSekarang()->nama ?? null,
+            'kelas_sekarang' => $this->kelasSekarang()->nama ?? null,
 
             'status_dalam_keluarga' => $this->status_dalam_keluarga,
             'anak_ke' => $this->anak_ke,

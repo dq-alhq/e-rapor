@@ -110,6 +110,7 @@ class GuruController extends Controller
         $guru->update($request->validated());
 
         if ($request->hasFile('avatar')) {
+            hapusFile($guru->user->avatar);
             $guru->user->update([
                 'avatar' => $request->file('avatar')->store('guru')
             ]);

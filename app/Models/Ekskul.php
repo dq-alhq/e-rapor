@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Ekskul extends Model
 {
@@ -40,8 +41,13 @@ class Ekskul extends Model
         return $this->belongsTo(Guru::class);
     }
 
-    public function siswa(): BelongsToMany
+    public function anggota_kelas(): BelongsToMany
     {
-        return $this->belongsToMany(Siswa::class, 'anggota_ekskuls', 'ekskul_id', 'anggota_kelas_id');
+        return $this->belongsToMany(AnggotaKelas::class, 'anggota_ekskuls', 'ekskul_id', 'anggota_kelas_id');
+    }
+
+    public function anggota_ekskul(): HasMany
+    {
+        return $this->hasMany(AnggotaEkskul::class);
     }
 }

@@ -1,42 +1,42 @@
-import { IconChevronDown, IconMenu } from 'hq-icons'
-import { type ReactNode, type Ref, createContext, useContext } from 'react'
+import { IconChevronDown, IconMenu, IconTriangleAlert } from 'hq-icons';
+import { createContext, type ReactNode, type Ref, useContext } from 'react';
 import type {
     CellProps,
     ColumnProps,
     ColumnResizerProps,
-    TableHeaderProps as HeaderProps,
-    TableProps as RACTableProps,
     RowProps,
-    TableBodyProps
-} from 'react-aria-components'
+    TableBodyProps,
+    TableHeaderProps as HeaderProps,
+    TableProps as RACTableProps
+} from 'react-aria-components';
 import {
     Button,
     Cell,
     Collection,
     Column,
     ColumnResizer as RACColumnResizer,
+    composeRenderProps,
+    ResizableTableContainer,
+    Row,
     Table as RACTable,
     TableBody as RACTableBody,
     TableHeader as RACTableHeader,
-    ResizableTableContainer,
-    Row,
-    composeRenderProps,
     useTableOptions
-} from 'react-aria-components'
+} from 'react-aria-components';
 
-import { cn } from '@/lib/utils'
-import { Checkbox } from './checkbox'
+import { cn } from '@/lib/utils';
+import { Checkbox } from './checkbox';
 
 interface TableProps extends RACTableProps {
-    className?: string
-    allowResize?: boolean
+    className?: string;
+    allowResize?: boolean;
 }
 
 const TableContext = createContext<TableProps>({
     allowResize: false
-})
+});
 
-const useTableContext = () => useContext(TableContext)
+const useTableContext = () => useContext(TableContext);
 
 const Table = ({ className, ...props }: TableProps) => {
     const renderTable = (
@@ -44,37 +44,37 @@ const Table = ({ className, ...props }: TableProps) => {
             className={cn('w-full min-w-full caption-bottom border-spacing-0 text-sm outline-hidden', className)}
             {...props}
         />
-    )
+    );
     return (
         <TableContext.Provider value={props}>
-            <div slot='table' className='relative w-full overflow-auto rounded-lg border'>
+            <div slot="table" className="relative w-full overflow-auto rounded-lg border">
                 {props.allowResize ? (
-                    <ResizableTableContainer className='overflow-auto'>{renderTable}</ResizableTableContainer>
+                    <ResizableTableContainer className="overflow-auto">{renderTable}</ResizableTableContainer>
                 ) : (
                     renderTable
                 )}
             </div>
         </TableContext.Provider>
-    )
-}
+    );
+};
 
 interface TableHeaderProps<T extends object> extends HeaderProps<T> {
-    className?: string
-    ref?: Ref<HTMLTableSectionElement>
+    className?: string;
+    ref?: Ref<HTMLTableSectionElement>;
 }
 
 const TableHeader = <T extends object>({ children, ref, className, columns, ...props }: TableHeaderProps<T>) => {
-    const { selectionBehavior, selectionMode, allowsDragging } = useTableOptions()
+    const { selectionBehavior, selectionMode, allowsDragging } = useTableOptions();
     return (
         <RACTableHeader ref={ref} className={cn('border-b bg-primary/10 text-fg', className)} {...props}>
-            {allowsDragging && <Column className='w-0' />}
+            {allowsDragging && <Column className="w-0" />}
             {selectionBehavior === 'toggle' && (
-                <Column className='w-0 pl-4'>{selectionMode === 'multiple' && <Checkbox slot='selection' />}</Column>
+                <Column className="w-0 pl-4">{selectionMode === 'multiple' && <Checkbox slot="selection" />}</Column>
             )}
             <Collection items={columns}>{children}</Collection>
         </RACTableHeader>
-    )
-}
+    );
+};
 
 const ColumnResizer = ({ className, ...props }: ColumnResizerProps) => (
     <RACColumnResizer
@@ -90,26 +90,27 @@ const ColumnResizer = ({ className, ...props }: ColumnResizerProps) => (
             )
         )}
     >
-        <div className='h-full w-px' />
+        <div className="h-full w-px" />
     </RACColumnResizer>
-)
+);
 
 const TableBody = <T extends object>(props: TableBodyProps<T>) => (
     <RACTableBody
         {...props}
+        renderEmptyState={props.renderEmptyState ?? Table.Empty}
         className={cn(
             '**:data-drop-target:py-2 **:data-drop-target:outline **:data-drop-target:outline-primary',
             props.className
         )}
     />
-)
+);
 
 interface TableCellProps extends CellProps {
-    className?: string
+    className?: string;
 }
 
 const TableCell = ({ children, className, ...props }: TableCellProps) => {
-    const { allowResize } = useTableContext()
+    const { allowResize } = useTableContext();
     return (
         <Cell
             {...props}
@@ -124,12 +125,12 @@ const TableCell = ({ children, className, ...props }: TableCellProps) => {
         >
             {children}
         </Cell>
-    )
-}
+    );
+};
 
 interface TableColumnProps extends ColumnProps {
-    className?: string
-    isResizable?: boolean
+    className?: string;
+    isResizable?: boolean;
 }
 
 const TableColumn = ({ isResizable = false, className, ...props }: TableColumnProps) => {
@@ -147,7 +148,7 @@ const TableColumn = ({ isResizable = false, className, ...props }: TableColumnPr
             )}
         >
             {({ allowsSorting, sortDirection, isHovered }) => (
-                <div className='flex items-center gap-2'>
+                <div className="flex items-center gap-2">
                     <>
                         {props.children as ReactNode}
                         {allowsSorting && (
@@ -164,16 +165,16 @@ const TableColumn = ({ isResizable = false, className, ...props }: TableColumnPr
                 </div>
             )}
         </Column>
-    )
-}
+    );
+};
 
 interface TableRowProps<T extends object> extends RowProps<T> {
-    className?: string
-    ref?: Ref<HTMLTableRowElement>
+    className?: string;
+    ref?: Ref<HTMLTableRowElement>;
 }
 
 const TableRow = <T extends object>({ children, className, columns, id, ref, ...props }: TableRowProps<T>) => {
-    const { selectionBehavior, allowsDragging } = useTableOptions()
+    const { selectionBehavior, allowsDragging } = useTableOptions();
     return (
         <Row
             ref={ref}
@@ -196,31 +197,37 @@ const TableRow = <T extends object>({ children, className, columns, id, ref, ...
             {...props}
         >
             {allowsDragging && (
-                <Cell className='cursor-grab pr-0 outline-primary data-dragging:cursor-grabbing'>
-                    <Button className='py-1.5 pl-3.5' slot='drag'>
+                <Cell className="cursor-grab pr-0 outline-primary data-dragging:cursor-grabbing">
+                    <Button className="py-1.5 pl-3.5" slot="drag">
                         <IconMenu />
                     </Button>
                 </Cell>
             )}
             {selectionBehavior === 'toggle' && (
-                <Cell className='pl-4'>
+                <Cell className="pl-4">
                     <span
                         aria-hidden
-                        className='absolute inset-y-0 left-0 hidden h-full w-0.5 bg-primary/70 group-selected:block'
+                        className="absolute inset-y-0 left-0 hidden h-full w-0.5 bg-primary/70 group-selected:block"
                     />
-                    <Checkbox slot='selection' />
+                    <Checkbox slot="selection" />
                 </Cell>
             )}
             <Collection items={columns}>{children}</Collection>
         </Row>
-    )
-}
+    );
+};
 
-Table.Body = TableBody
-Table.Cell = TableCell
-Table.Column = TableColumn
-Table.Header = TableHeader
-Table.Row = TableRow
+const TableEmpty = () => (
+    <div className="flex items-center justify-center p-2 text-muted-fg text-sm font-medium">
+        <IconTriangleAlert className="size-4! mr-2" /> Tidak ada data!
+    </div>);
 
-export { Table }
-export type { TableBodyProps, TableCellProps, TableColumnProps, TableProps, TableRowProps }
+Table.Body = TableBody;
+Table.Cell = TableCell;
+Table.Column = TableColumn;
+Table.Header = TableHeader;
+Table.Row = TableRow;
+Table.Empty = TableEmpty;
+
+export { Table };
+export type { TableBodyProps, TableCellProps, TableColumnProps, TableProps, TableRowProps };

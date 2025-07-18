@@ -17,35 +17,17 @@ class SekolahController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(Sekolah $sekolah)
-    {
-        //
-    }
-
-    /**
      * Show the form for editing the specified resource.
      */
     public function edit(Sekolah $sekolah)
     {
-        //
+        return inertia('sekolah/form', [
+            'form' => [
+                'title' => 'Edit Data Sekolah',
+                'url' => route('sekolah.update', $sekolah),
+                'method' => 'put'
+            ]
+        ]);
     }
 
     /**
@@ -53,7 +35,33 @@ class SekolahController extends Controller
      */
     public function update(Request $request, Sekolah $sekolah)
     {
-        //
+        $validated = $request->validate([
+            'nama' => ['required', 'string', 'max:128'],
+            'jenjang' => ['required', 'string', 'max:128'],
+            'npsn' => ['nullable', 'string', 'max:128'],
+            'nis' => ['nullable', 'string', 'max:128'],
+            'nss' => ['nullable', 'string', 'max:128'],
+            'nds' => ['nullable', 'string', 'max:128'],
+            'alamat' => ['nullable', 'string', 'max:128'],
+            'wilayah_id' => ['nullable', 'exists:wilayahs,id'],
+            'kodepos' => ['nullable', 'string', 'max:8'],
+            'telepon' => ['nullable', 'string', 'max:32'],
+            'email' => ['nullable', 'string', 'email'],
+            'kepsek_id' => ['nullable', 'exists:gurus,id'],
+            'logo' => ['nullable', 'image', 'mimes:jpg,jpeg,png', 'max:2048'],
+        ]);
+
+        $sekolah->update($validated);
+
+        if ($request->hasFile('logo')) {
+            hapusFile($sekolah->logo);
+            $sekolah->update([
+                'logo' => $request->file('logo')->store('sekolah')
+            ]);
+        }
+
+        toast('Data Sekolah Berhasil Diperbarui');
+        return to_route('sekolah.index');
     }
 
     /**

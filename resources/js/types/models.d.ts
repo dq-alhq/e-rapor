@@ -358,10 +358,12 @@ declare global {
             nds: string | null;
             alamat: string | null;
             wilayah_id: number | null;
+            alamat_lengkap: string | null;
             kodepos: string | null;
             telepon: string | null;
             email: string | null;
             kepsek_id: number | null;
+            logo: string | null;
             created_at: string | null;
             updated_at: string | null;
             // relations
@@ -402,6 +404,7 @@ declare global {
             updated_at: string | null;
             alamat_lengkap: string | null;
             avatar: string | null;
+            kelas_sekarang: string | null;
             // relations
             user: User;
             anggota_kelas: AnggotaKelas[];

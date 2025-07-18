@@ -10,7 +10,6 @@ interface Props {
 }
 
 export default function OperatorShow({ operator }: Props) {
-    console.log(operator);
     return (
         <>
             <Head title={operator.nama} />

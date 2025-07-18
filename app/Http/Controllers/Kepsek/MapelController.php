@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Kepsek;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\MapelDetailsResource;
 use App\Http\Resources\MapelResource;
+use App\Models\Guru;
 use App\Models\Kelas;
 use App\Models\Mapel;
 use App\Models\Pembelajaran;
@@ -83,12 +84,18 @@ class MapelController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Mapel $mapel, Kelas $kelas = null, string $guru = null)
+    public function show(Request $request, Mapel $mapel, Kelas $kelas = null, Guru $guru = null)
     {
+        $daftarKelas = Kelas::query()->where('tapel_id', tapelAktif())->orderBy('tingkat')->select(['id', 'nama'])->get();
+
         return inertia('mapel/show', [
             'mapel' => MapelDetailsResource::make($mapel->load(['kelompokMapel', 'guru', 'kelas'])),
-            'kelas' => $kelas ?? new Kelas(),
-            'guru' => $guru
+            'kelas' => $daftarKelas,
+
+            'form' => [
+                'kelas' => $kelas ?? new Kelas(),
+                'guru' => $guru ?? new Guru(),
+            ]
         ]);
     }
 
@@ -131,14 +138,14 @@ class MapelController extends Controller
         //
     }
 
-    public function pembelajaran(Mapel $mapel, Kelas $kelas)
+    public function pembelajaran(Request $request, Mapel $mapel, Kelas $kelas)
     {
         $guru = Pembelajaran::query()
             ->where('mapel_id', $mapel->id)
             ->where('kelas_id', $kelas->id)
-            ->first()?->guru_id;
+            ->first()->guru ?? null;
 
-        return $this->show($mapel, $kelas, $guru);
+        return $this->show($request, $mapel, $kelas, $guru);
     }
 
     public function updatePembelajaran(Mapel $mapel, Kelas $kelas)

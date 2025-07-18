@@ -3,22 +3,25 @@ import { useState } from 'react';
 import { isFileDropItem } from 'react-aria-components';
 
 import { Avatar, DropZone, FileTrigger } from '@/components/ui';
+import { compressImage } from '@/lib/compress-image';
 import { cn } from '@/lib/utils';
 
 interface Props {
     value: string;
+    label?: string;
     onChange: (e: File) => void;
 }
 
-export function UploadFoto({ value, onChange }: Props) {
+export function UploadFoto({ value, onChange, label = 'Upload Foto' }: Props) {
     const [droppedImage, setDroppedImage] = useState<string | null>(null);
 
     const onDropHandler = async (e: DropEvent) => {
         const item = e.items.filter(isFileDropItem).find((item) => item.type === 'image/jpeg' || item.type === 'image/png');
         if (item) {
             const file = await item.getFile();
-            setDroppedImage(URL.createObjectURL(file));
-            onChange(file);
+            const compressedFile = await compressImage(file);
+            setDroppedImage(URL.createObjectURL(compressedFile));
+            onChange(compressedFile);
         }
     };
 
@@ -28,8 +31,9 @@ export function UploadFoto({ value, onChange }: Props) {
             const item = files[0];
 
             if (item) {
-                setDroppedImage(URL.createObjectURL(item));
-                onChange(item);
+                const compressedFile = await compressImage(item);
+                setDroppedImage(URL.createObjectURL(compressedFile));
+                onChange(compressedFile);
             }
         }
     };
@@ -45,7 +49,7 @@ export function UploadFoto({ value, onChange }: Props) {
                 <input type="hidden" name="avatar" value={droppedImage ?? value} />
             </DropZone>
             <FileTrigger size="sm" acceptedFileTypes={['image/png', 'image/jpeg']} onSelect={onSelectHandler}>
-                Upload Foto
+                {label}
             </FileTrigger>
         </div>
     );

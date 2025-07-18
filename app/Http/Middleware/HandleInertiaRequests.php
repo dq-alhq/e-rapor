@@ -3,6 +3,7 @@
 namespace App\Http\Middleware;
 
 use App\Http\Resources\AuthUserResource;
+use App\Http\Resources\SekolahResource;
 use App\Models\Sekolah;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
@@ -40,7 +41,7 @@ class HandleInertiaRequests extends Middleware
     {
         return [
             ...parent::share($request),
-            'sekolah' => fn() => Sekolah::query()->with(['wilayah', 'kepsek'])->first(),
+            'sekolah' => fn() => SekolahResource::make(Sekolah::query()->with(['wilayah', 'kepsek'])->first()),
             'tapel_aktif' => fn() => $request->session()->get('tapel') ?? null,
             'auth' => [
                 'user' => $request->user() ? AuthUserResource::make($request->user()) : null,

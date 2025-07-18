@@ -12,7 +12,7 @@ return [
     |
     | Requires output-file set to true
     */
-    'run-after-migrate' => true,
+    'run-after-migrate' => false,
 
     /*
     |--------------------------------------------------------------------------
@@ -22,7 +22,7 @@ return [
     | Specifies whether to output the TypeScript definitions to a file. If set
     | to true, the definitions will be saved to the specified file path.
     */
-    'output-file' => true,
+    'output-file' => false,
 
     /*
     |--------------------------------------------------------------------------

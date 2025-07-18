@@ -102,6 +102,7 @@ class OperatorController extends Controller
         $operator->update($request->validated());
 
         if ($request->hasFile('avatar')) {
+            hapusFile($operator->user->avatar);
             $operator->user->update([
                 'avatar' => $request->file('avatar')->store('operator')
             ]);

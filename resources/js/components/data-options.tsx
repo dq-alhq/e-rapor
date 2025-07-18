@@ -19,9 +19,10 @@ interface Props {
     attributes?: PageProps;
     filters?: { id: string; label: string }[];
     perPages?: { value: number; label: string }[];
+    url?: string;
 }
 
-export default function DataOptions({ className, attributes, filters, perPages = PerPages }: Props) {
+export default function DataOptions({ className, attributes, filters, perPages = PerPages, url }: Props) {
     const [query, setQuery] = useState<{
         search: string;
         perPage: number;
@@ -40,10 +41,12 @@ export default function DataOptions({ className, attributes, filters, perPages =
 
     useEffect(() => {
         const cleanedQuery = cleanQuery(debouncedQuery);
-        if ((route().current() as string).includes('index')) {
+        if (url) {
+            router.get(url, cleanedQuery, { preserveState: true });
+        } else if ((route().current() as string).includes('index')) {
             router.get(route(route().current() as string), cleanedQuery, { preserveState: true });
         }
-    }, [debouncedQuery]);
+    }, [debouncedQuery, url]);
 
     function onChange(key: string, value: string | number | string[] | undefined) {
         setQuery((prev) => ({ ...prev, [key]: value }));

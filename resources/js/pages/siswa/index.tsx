@@ -78,7 +78,7 @@ export default function Siswa({ siswas, kelas, tapel_aktif }: Props) {
                                     <span>{siswa.nama}</span>
                                 </Table.Cell>
                                 <Table.Cell className="space-x-2">{siswa.nis}</Table.Cell>
-                                <Table.Cell>{(siswa.kelas as string) ?? <Badge variant="danger">BELUM DIISI</Badge>}</Table.Cell>
+                                <Table.Cell>{siswa.kelas_sekarang ?? <Badge variant="danger">BELUM DIISI</Badge>}</Table.Cell>
                             </Table.Row>
                         ))}
                     </Table.Body>

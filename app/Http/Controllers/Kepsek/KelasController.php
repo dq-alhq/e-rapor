@@ -4,8 +4,11 @@ namespace App\Http\Controllers\Kepsek;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\KelasRequest;
+use App\Http\Resources\KelasDetailsResource;
 use App\Http\Resources\KelasResource;
+use App\Http\Resources\SiswaResource;
 use App\Models\Kelas;
+use App\Models\Siswa;
 use App\Models\Tapel;
 use Illuminate\Http\Request;
 
@@ -45,10 +48,11 @@ class KelasController extends Controller
                 'kelas' => fn() => $kelas,
 
                 'form' => [
-                    'data' => $kela ? $kela->load('wali') : new Kelas(),
-                    'method' => $kela ? 'put' : 'post',
-                    'title' => $kela ? 'Edit Kelas' : 'Tambah Kelas',
-                    'url' => $kela ? route('kelas.update', $kela) : route('kelas.store'),
+                    'data' => new Kelas(),
+                    'options' => opsiTingkat(),
+                    'method' => 'post',
+                    'title' => 'Tambah Kelas',
+                    'url' => route('kelas.store'),
                 ]
             ]
         );
@@ -76,9 +80,18 @@ class KelasController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Kelas $kelas)
+    public function show(Request $request, Kelas $kela)
     {
-        //
+        return inertia('kelas/show', [
+            'kelas' => KelasDetailsResource::make($kela->load(['wali', 'siswa'])),
+            'form' => [
+                'data' => $kela->load(['wali', 'siswa']),
+                'options' => opsiTingkat(),
+                'method' => 'put',
+                'title' => 'Edit Kelas',
+                'url' => route('kelas.update', $kela),
+            ]
+        ]);
     }
 
     /**
@@ -86,7 +99,7 @@ class KelasController extends Controller
      */
     public function edit(Request $request, Kelas $kela)
     {
-        return $this->index($request, $kela);
+        return $this->show($request, $kela);
     }
 
     /**
@@ -106,5 +119,50 @@ class KelasController extends Controller
     public function destroy(Kelas $kelas)
     {
         //
+    }
+
+    public function anggota_kelas(Request $request, Kelas $kelas)
+    {
+        $search = $request->search ?? null;
+        $perPage = $request->perPage ?? 10;
+        $filter = $request->filter ?? null;
+        $anggota_kelas = Siswa::query()
+            ->whereHas('anggotaKelas', fn($query) => $query->where('kelas_id', $kelas->id))
+            ->when($filter, function ($query, $tahun_masuk) {
+                return $query->whereIn('tahun_masuk', $tahun_masuk);
+            })
+            ->when($search, function ($query, $search) {
+                return $query->where('nama', 'like', "%$search%");
+            })
+            ->paginate($perPage);
+
+        $bukan_anggota_kelas = Siswa::query()
+            ->whereDoesntHave('anggotaKelas')
+            ->when($filter, function ($query, $tahun_masuk) {
+                return $query->whereIn('tahun_masuk', $tahun_masuk);
+            })
+            ->when($search, function ($query, $search) {
+                return $query->where('nama', 'like', "%$search%");
+            })
+            ->paginate($perPage);
+
+        return inertia('kelas/anggota-form', [
+                'kelas' => KelasDetailsResource::make($kelas->load(['wali'])),
+                'bukan_anggota_kelas' => fn() => SiswaResource::collection($bukan_anggota_kelas),
+                'anggota_kelas' => fn() => SiswaResource::collection($anggota_kelas),
+                'angkatan' => opsiAngkatan()
+            ]
+        );
+    }
+
+    public function update_anggota_kelas(Request $request, Kelas $kelas)
+    {
+        if ($kelas->anggotaKelas()->where('siswa_id', $request->siswa)->exists()) {
+            $kelas->siswa()->detach($request->siswa);
+            toast('Berhasil menghapus Anggota Kelas');
+        } else {
+            $kelas->siswa()->attach($request->siswa);
+            toast('Berhasil menambahkan Anggota Kelas');
+        }
     }
 }

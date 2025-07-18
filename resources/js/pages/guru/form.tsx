@@ -27,6 +27,7 @@ export default function GuruForm({ guru, form }: Props) {
         wilayah_id: guru.wilayah_id || '',
         avatar: guru.avatar || (null as File | null),
     });
+    console.log(errors);
 
     function onSubmit(e: { preventDefault: () => void }) {
         e.preventDefault();
@@ -42,6 +43,9 @@ export default function GuruForm({ guru, form }: Props) {
                 <Card className="h-fit lg:col-span-1">
                     <Card.Content className="mt-6 flex flex-col items-center gap-2">
                         <UploadFoto value={guru.avatar || ''} onChange={(v) => setData('avatar', v)} />
+                        {errors.avatar && (
+                            <span className="flex flex-wrap items-center justify-center gap-1 text-xs text-danger">{errors.avatar}</span>
+                        )}
                     </Card.Content>
                 </Card>
                 <Card className="h-fit lg:col-span-3">

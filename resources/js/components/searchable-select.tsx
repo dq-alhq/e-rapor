@@ -18,7 +18,7 @@ export const SearchableSelect = ({ data, additional, ...props }: Props) => {
 
     const list = useAsyncList<item>({
         async load({ signal, filterText }) {
-            const res = await fetch(`${url}/api/${data}?q=${filterText}${additional ? `&${additional}` : ''}`, { signal });
+            const res = await fetch(`${url}/api/${data}?q=${props.selectedKey ?? filterText}${additional ? `&${additional}` : ''}`, { signal });
             const json = await res.json();
             return {
                 items: json,

@@ -83,11 +83,6 @@ class Siswa extends Model
         return $this->belongsTo(Wilayah::class);
     }
 
-    public function ekskul(): HasManyThrough
-    {
-        return $this->hasManyThrough(Ekskul::class, AnggotaKelas::class);
-    }
-
     public function proyek(): HasManyThrough
     {
         return $this->hasManyThrough(Proyek::class, AnggotaKelas::class);

@@ -21,7 +21,7 @@ class AuthUserResource extends JsonResource
             'name' => $this->name,
             'username' => $this->username,
             'email' => $this->email,
-            'avatar' => $this->avatar,
+            'avatar' => $this->avatar ? route('image', $this->avatar) : null,
             'roles' => $this->getRoles(),
         ];
     }

@@ -2,14 +2,11 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Sekolah extends Model
 {
-    use HasFactory;
-
     /**
      * The attributes that are mass assignable.
      *
@@ -28,6 +25,7 @@ class Sekolah extends Model
         'telepon',
         'email',
         'kepsek_id',
+        'logo'
     ];
 
     /**
@@ -56,6 +54,6 @@ class Sekolah extends Model
 
     public function alamat(): string
     {
-        return $this->alamat . ', ' . $this->wilayah->nama;
+        return $this->wilayah ? $this->alamat . ', ' . $this->wilayah->name : $this->alamat;
     }
 }

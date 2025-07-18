@@ -1,4 +1,4 @@
-import { buttonStyle, Card, DL, Link, Table } from '@/components/ui';
+import { Badge, buttonStyle, Card, DL, Link, Table } from '@/components/ui';
 import AppLayout from '@/layouts/app-layout';
 import PembelajaranForm from '@/pages/mapel/pembelajaran-form';
 import { type BreadcrumbItem } from '@/types';
@@ -9,11 +9,14 @@ import { useState } from 'react';
 interface Props {
     mapel: model.Mapel & { pembelajaran: model.Pembelajaran[] };
     tapel_aktif: model.Tapel;
-    kelas: model.Kelas;
-    guru: number | string;
+    kelas: model.Kelas[];
+    form: {
+        kelas: model.Kelas;
+        guru: model.Guru;
+    };
 }
 
-export default function MapelShow({ mapel, tapel_aktif, kelas, guru }: Props) {
+export default function MapelShow({ mapel, tapel_aktif, form, kelas }: Props) {
     const [openForm, setOpenForm] = useState(route().current() === 'pembelajaran.mapel');
     return (
         <>
@@ -61,11 +64,22 @@ export default function MapelShow({ mapel, tapel_aktif, kelas, guru }: Props) {
                                 <Table.Column>Guru</Table.Column>
                             </Table.Header>
                             <Table.Body>
-                                {mapel.pembelajaran?.map((p, index) => (
-                                    <Table.Row key={p.id} href={route('pembelajaran.mapel', [mapel.id, p.kelas.id])}>
+                                {/*{mapel.pembelajaran?.map((p, index) => (*/}
+                                {/*    <Table.Row key={p.id} href={route('pembelajaran.mapel', [mapel.id, p.kelas.id])}>*/}
+                                {/*        <Table.Cell>{index + 1}</Table.Cell>*/}
+                                {/*        <Table.Cell>{p.kelas.nama}</Table.Cell>*/}
+                                {/*        <Table.Cell>{p.guru.nama}</Table.Cell>*/}
+                                {/*    </Table.Row>*/}
+                                {/*))}*/}
+                                {kelas.map((k, index) => (
+                                    <Table.Row key={k.id} href={route('pembelajaran.mapel', [mapel.id, k.id])}>
                                         <Table.Cell>{index + 1}</Table.Cell>
-                                        <Table.Cell>{p.kelas.nama}</Table.Cell>
-                                        <Table.Cell>{p.guru.nama}</Table.Cell>
+                                        <Table.Cell>{k.nama}</Table.Cell>
+                                        <Table.Cell>
+                                            {mapel.pembelajaran.find((p) => p.kelas.id === k.id)?.guru?.nama || (
+                                                <Badge variant="danger">Belum Diatur</Badge>
+                                            )}
+                                        </Table.Cell>
                                     </Table.Row>
                                 ))}
                             </Table.Body>
@@ -73,7 +87,7 @@ export default function MapelShow({ mapel, tapel_aktif, kelas, guru }: Props) {
                     </Card.Content>
                 </Card>
             </div>
-            <PembelajaranForm guru={guru} kelas={kelas} mapel={mapel} isOpen={openForm} setIsOpen={setOpenForm} />
+            <PembelajaranForm form={form} mapel={mapel} isOpen={openForm} setIsOpen={setOpenForm} />
         </>
     );
 }
@@ -81,7 +95,7 @@ export default function MapelShow({ mapel, tapel_aktif, kelas, guru }: Props) {
 const breadcrumbs: BreadcrumbItem[] = [
     { title: 'Dashboard', href: '/' },
     { title: 'Data Mapel', href: '/mapel' },
-    { title: 'Edit Mapel', href: '/mapel' },
+    { title: 'Detail Mapel', href: '/mapel' },
 ];
 
 MapelShow.layout = (page: React.ReactNode) => <AppLayout children={page} breadcrumbs={breadcrumbs} />;

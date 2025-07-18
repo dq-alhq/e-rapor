@@ -15,13 +15,13 @@ class TapelSeeder extends Seeder
     {
         collect([
             [
-                'tahun' => 2023,
+                'tahun' => 2025,
                 'semester' => "1",
                 'tempat_rapor' => 'Melirang',
                 'aktif' => true
             ],
             [
-                'tahun' => 2023,
+                'tahun' => 2025,
                 'semester' => "2",
                 'tempat_rapor' => 'Melirang',
             ]

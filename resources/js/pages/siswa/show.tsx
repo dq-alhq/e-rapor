@@ -19,7 +19,7 @@ export default function SiswaShow({ siswa }: Props) {
                     <Card.Content className="mt-6 flex flex-col items-center gap-2">
                         <Avatar shape="square" size="5xl" src={siswa.avatar || ''} alt={siswa.nama} />
                         <div className="my-2 flex flex-wrap items-center justify-center gap-1 text-sm">
-                            <Badge variant="danger">{siswa.kelas}</Badge>
+                            <Badge variant="danger">{siswa.kelas_sekarang}</Badge>
                         </div>
                     </Card.Content>
                 </Card>

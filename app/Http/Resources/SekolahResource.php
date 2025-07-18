@@ -23,11 +23,14 @@ class SekolahResource extends JsonResource
             'nis' => $this->nis,
             'nss' => $this->nss,
             'nds' => $this->nds,
-            'alamat' => "{$this->alamat}, {$this->wilayah->name}",
+            'alamat' => $this->alamat,
+            'wilayah_id' => $this->wilayah_id,
+            'alamat_lengkap' => $this->alamat(),
             'kodepos' => $this->kodepos,
             'telepon' => $this->telepon,
             'email' => $this->email,
-            'kepsek_id' => $this->kepsek->nama,
+            'logo' => $this->logo ? route('image', $this->logo) : null,
+            'kepsek' => GuruDetailsResource::make($this->kepsek),
         ];
     }
 }

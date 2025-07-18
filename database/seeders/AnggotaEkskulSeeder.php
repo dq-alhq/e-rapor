@@ -17,7 +17,7 @@ class AnggotaEkskulSeeder extends Seeder
 
         foreach ($ekskul as $e) {
             $anggotaKelas = AnggotaKelas::query()->inRandomOrder()->take(3)->get();
-            $e->siswa()->sync($anggotaKelas);
+            $e->anggota_kelas()->sync($anggotaKelas);
         }
     }
 }

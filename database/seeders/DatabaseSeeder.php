@@ -22,10 +22,10 @@ class DatabaseSeeder extends Seeder
             SiswaSeeder::class,
             MapelSeeder::class,
             EkskulSeeder::class,
-            ProyekSeeder::class,
-            AnggotaKelasSeeder::class,
-            PembelajaranSeeder::class,
-            AnggotaEkskulSeeder::class
+//            ProyekSeeder::class,
+//            AnggotaKelasSeeder::class,
+//            PembelajaranSeeder::class,
+//            AnggotaEkskulSeeder::class
         ]);
     }
 }

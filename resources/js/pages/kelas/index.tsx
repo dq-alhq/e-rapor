@@ -1,11 +1,11 @@
 import DataOptions from '@/components/data-options';
 import Paginator from '@/components/paginator';
-import { buttonStyle, Card, Header, Link } from '@/components/ui';
+import { buttonStyle, Header, Link, Table } from '@/components/ui';
 import AppLayout from '@/layouts/app-layout';
 import KelasForm from '@/pages/kelas/form';
 import type { BreadcrumbItem, FormSetting, Paginate } from '@/types';
 import { Head } from '@inertiajs/react';
-import { IconDiamondPlus, IconPencil } from 'hq-icons';
+import { IconDiamondPlus } from 'hq-icons';
 import { useState } from 'react';
 
 const breadcrumbs: BreadcrumbItem[] = [
@@ -16,7 +16,7 @@ const breadcrumbs: BreadcrumbItem[] = [
 interface Props {
     kelas: Paginate & { data: model.Kelas[] };
     tapel_aktif: model.Tapel;
-    form: FormSetting & { data: model.Kelas };
+    form: FormSetting & { data: model.Kelas; options: number[] };
 }
 
 export default function Kelas({ kelas, tapel_aktif, form }: Props) {
@@ -39,34 +39,28 @@ export default function Kelas({ kelas, tapel_aktif, form }: Props) {
                     </Header.Action>
                 </Header>
                 <DataOptions attributes={attributes} />
-                <div className="grid gap-4 lg:grid-cols-2">
-                    {data?.map((kela) => (
-                        <Card key={kela.id}>
-                            <Card.Header>
-                                <Card.Title>{kela.nama}</Card.Title>
-                                <Card.Description>Tingkat {kela.tingkat}</Card.Description>
-                                <Card.Action>
-                                    <Link className={buttonStyle({ size: 'sm', variant: 'outline' })} href={route('kelas.edit', kela.id)}>
-                                        <IconPencil />
-                                        Edit
-                                    </Link>
-                                </Card.Action>
-                            </Card.Header>
-                            <Card.Content className="grid grid-cols-[auto_1fr] gap-4">
-                                <div className="flex flex-col items-center justify-center gap-1 rounded-lg border p-3">
-                                    <div className="text-sm">Siswa</div>
-                                    <div className="text-2xl">{kela.siswa_count}</div>
-                                </div>
-                                <div className="flex flex-col items-center justify-center gap-1 rounded-lg border p-3">
-                                    <div className="text-sm">Wali Kelas</div>
-                                    <Link className={buttonStyle({ size: 'sm', variant: 'outline' })} href={route('guru.show', kela.wali.id)}>
-                                        {kela.wali.nama}
-                                    </Link>
-                                </div>
-                            </Card.Content>
-                        </Card>
-                    ))}
-                </div>
+                <Table aria-label="Data Mapel">
+                    <Table.Header>
+                        <Table.Column isRowHeader className="w-12">
+                            #
+                        </Table.Column>
+                        <Table.Column>Nama</Table.Column>
+                        <Table.Column>Tingkat</Table.Column>
+                        <Table.Column>Jumlah Siswa</Table.Column>
+                        <Table.Column>Wali kelas</Table.Column>
+                    </Table.Header>
+                    <Table.Body>
+                        {data?.map((kelas, index) => (
+                            <Table.Row href={route('kelas.show', kelas.id)} key={kelas.id}>
+                                <Table.Cell>{meta.from + index}</Table.Cell>
+                                <Table.Cell>{kelas.nama}</Table.Cell>
+                                <Table.Cell>{kelas.tingkat}</Table.Cell>
+                                <Table.Cell>{kelas.siswa_count}</Table.Cell>
+                                <Table.Cell>{kelas.wali.nama}</Table.Cell>
+                            </Table.Row>
+                        ))}
+                    </Table.Body>
+                </Table>
                 <Paginator meta={meta} links={links} only={['kelas']} />
             </div>
             <KelasForm tapel_aktif={tapel_aktif} form={form} isOpen={openForm} setIsOpen={setOpenForm} />

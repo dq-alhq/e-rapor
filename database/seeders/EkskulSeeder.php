@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-use App\Models\AnggotaKelas;
 use App\Models\Ekskul;
 use Illuminate\Database\Seeder;
 
@@ -25,16 +24,6 @@ class EkskulSeeder extends Seeder
             Ekskul::factory()->create([
                 'nama' => $ekskul,
             ]);
-        }
-
-        $createdEkskul = Ekskul::query()->get();
-
-        $siswa = AnggotaKelas::query()->get();
-
-        foreach ($createdEkskul as $ekskul) {
-            foreach ($siswa as $s) {
-                $ekskul->siswa()->attach($s);
-            }
         }
     }
 }
