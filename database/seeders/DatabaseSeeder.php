@@ -24,8 +24,9 @@ class DatabaseSeeder extends Seeder
             EkskulSeeder::class,
 //            ProyekSeeder::class,
 //            AnggotaKelasSeeder::class,
-//            PembelajaranSeeder::class,
+            PembelajaranSeeder::class,
 //            AnggotaEkskulSeeder::class
+            JadwalSeeder::class,
         ]);
     }
 }

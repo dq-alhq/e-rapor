@@ -27,7 +27,6 @@ export default function GuruForm({ guru, form }: Props) {
         wilayah_id: guru.wilayah_id || '',
         avatar: guru.avatar || (null as File | null),
     });
-    console.log(errors);
 
     function onSubmit(e: { preventDefault: () => void }) {
         e.preventDefault();

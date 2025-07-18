@@ -85,7 +85,9 @@ trait HasGuruRoles
         return $pembelajaran->map(function ($pembelajaran) {
             return [
                 'id' => $pembelajaran->id,
+                'mapel_id' => $pembelajaran->mapel_id,
                 'mapel' => $pembelajaran->mapel->nama,
+                'kelas_id' => $pembelajaran->kelas_id,
                 'kelas' => $pembelajaran->kelas->nama,
             ];
         });
@@ -129,5 +131,23 @@ trait HasGuruRoles
             $roles = array_merge($roles, $wali->toArray());
         }
         return $roles;
+    }
+
+    public function daftarKelas(): array
+    {
+        $kelas = $this->mengajarKelas()->toArray();
+        return array_column($kelas, 'id');
+    }
+
+    public function daftarMapel(): array
+    {
+        $mapel = $this->mengajarMapel()->toArray();
+        return array_column($mapel, 'id');
+    }
+
+    public function daftarEkskul(): array
+    {
+        $ekskul = $this->pembinaEkskul()->toArray();
+        return array_column($ekskul, 'id');
     }
 }

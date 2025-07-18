@@ -2,7 +2,7 @@ import { Form, Link, TextField } from '@/components/ui';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import AuthLayout from '@/layouts/auth-layout';
-import { Head, useForm, usePage } from '@inertiajs/react';
+import { Head, useForm } from '@inertiajs/react';
 import { IconLogIn } from 'hq-icons';
 import type { FormEventHandler } from 'react';
 
@@ -30,8 +30,6 @@ export default function Login({ status, canResetPassword }: LoginProps) {
             onFinish: () => reset('password'),
         });
     };
-
-    console.log(usePage().props);
 
     return (
         <>

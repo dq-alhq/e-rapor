@@ -18,6 +18,7 @@ return new class extends Migration {
             $table->string('nama');
             $table->string('singkatan');
             $table->integer('urutan')->nullable();
+            $table->integer('jpm')->default(0);
             $table->timestamps();
 
             $table->unique(['kelompok_mapel_id', 'urutan']);

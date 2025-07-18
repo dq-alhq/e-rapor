@@ -34,11 +34,11 @@ export function AppSidebar({ variant, children, breadcrumbs }: AppSidebarProps) 
         <>
             <Sidebar collapsible="dock" variant={variant} isMobileOpen={open} onMobileOpenChange={setOpen}>
                 <Sidebar.Header>
-                    <AppLogo />
-                    <Sidebar.Label className="text-sm text-[#ee2e03]">Laravel</Sidebar.Label>
+                    <AppLogo className="size-7! text-primary" />
+                    <Sidebar.Label className="text-sm text-primary uppercase">{import.meta.env.VITE_APP_NAME}</Sidebar.Label>
                 </Sidebar.Header>
 
-                <Sidebar.Content className="no-scrollbar max-h-[85vh] flex-1 overflow-y-auto">
+                <Sidebar.Content className="no-scrollbar max-h-[80vh] flex-1 overflow-y-auto">
                     {(user.roles?.includes('Kepala Sekolah') || user.roles?.includes('Operator')) && <MenuKepsek pathname={pathname} />}
                     {user.roles?.includes('Guru') && <MenuGuru pathname={pathname} />}
                     {user.roles?.includes('Wali Kelas') && <MenuWaliKelas pathname={pathname} />}

@@ -49,7 +49,13 @@ class HandleInertiaRequests extends Middleware
             'ziggy' => fn(): array => [
                 ...(new Ziggy)->toArray(),
                 'location' => $request->url(),
-                'prev_url' => $request->headers->get('referer') == $request->url() ? null : $request->headers->get('referer'),
+                'prev_url' => function () {
+                    if (url()->previous() !== route('login') && url()->previous() !== '' && url()->previous() !== url()->current()) {
+                        return url()->previous();
+                    } else {
+                        return '/';
+                    }
+                },
             ],
             'toast' => fn() => [
                 'message' => $request->session()->get('message'),

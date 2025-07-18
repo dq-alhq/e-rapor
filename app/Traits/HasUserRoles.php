@@ -17,7 +17,7 @@ trait HasUserRoles
 
     public function isOperator(): bool
     {
-        return $this->operator()->exists();
+        return $this->isKepsek() || $this->operator()->exists();
     }
 
     public function isSiswa(): bool
@@ -60,7 +60,9 @@ trait HasUserRoles
         $roles = [];
         if ($this->isKepsek()) $roles[] = "Kepala Sekolah";
         if ($this->isOperator()) $roles[] = "Operator";
-        if ($this->isGuru()) $roles[] = "Guru";
+        if ($this->isGuru()) {
+            $roles[] = "Guru";
+        }
         if ($this->isSiswa()) $roles[] = "Siswa";
         return $roles;
     }

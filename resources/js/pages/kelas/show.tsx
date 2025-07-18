@@ -1,5 +1,6 @@
 import { buttonStyle, Card, DL, Link, Table } from '@/components/ui';
 import AppLayout from '@/layouts/app-layout';
+import { IsAdmin } from '@/lib/middleware';
 import KelasForm from '@/pages/kelas/form';
 import { type BreadcrumbItem, FormSetting } from '@/types';
 import { Head } from '@inertiajs/react';
@@ -23,9 +24,11 @@ export default function KelasShow({ kelas, tapel_aktif, form }: Props) {
                         <Card.Title>Data Kelas</Card.Title>
                         <Card.Description>Berikut adalah data kelas</Card.Description>
                         <Card.Action>
-                            <Link className={buttonStyle({ variant: 'outline' })} href={route('kelas.edit', kelas.id)}>
-                                <IconPencil /> Edit
-                            </Link>
+                            {IsAdmin() && (
+                                <Link className={buttonStyle({ variant: 'outline' })} href={route('kelas.edit', kelas.id)}>
+                                    <IconPencil /> Edit
+                                </Link>
+                            )}
                             <Link className={buttonStyle({ variant: 'outline' })} href={route('kelas.index')}>
                                 <IconArrowLeft />
                                 Kembali
@@ -49,11 +52,13 @@ export default function KelasShow({ kelas, tapel_aktif, form }: Props) {
                         <Card.Description>
                             Pada Tahun Pelajaran {tapel_aktif.tahun}/{tapel_aktif.tahun + 1} Semester {tapel_aktif.semester}
                         </Card.Description>
-                        <Card.Action>
-                            <Link className={buttonStyle({ variant: 'outline' })} href={route('kelas.anggota_kelas', kelas.id)}>
-                                <IconGroup /> Edit Anggota
-                            </Link>
-                        </Card.Action>
+                        {IsAdmin() && (
+                            <Card.Action>
+                                <Link className={buttonStyle({ variant: 'outline' })} href={route('kelas.anggota_kelas', kelas.id)}>
+                                    <IconGroup /> Edit Anggota
+                                </Link>
+                            </Card.Action>
+                        )}
                     </Card.Header>
                     <Card.Content>
                         <Table aria-label="Data Anggota Kelas">

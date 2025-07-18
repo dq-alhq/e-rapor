@@ -82,6 +82,7 @@ class KelasController extends Controller
      */
     public function show(Request $request, Kelas $kela)
     {
+        cekAksesKelas($kela);
         return inertia('kelas/show', [
             'kelas' => KelasDetailsResource::make($kela->load(['wali', 'siswa'])),
             'form' => [

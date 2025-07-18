@@ -1,10 +1,19 @@
 import type { Config } from 'ziggy-js';
 
-const roles = ['Kepala Sekolah' | 'Guru' | 'Wali Kelas' | 'Siswa' | 'Operator' | 'Pembina Ekskul' | 'Koordinator Proyek'];
+export type Roles = 'Kepala Sekolah' | 'Guru' | 'Wali Kelas' | 'Siswa' | 'Operator' | 'Pembina Ekskul' | 'Koordinator Proyek' | object;
+export type RoleGuru = {
+    kelas?: number[];
+    mapel?: number[];
+    pembina_ekskul?: number[];
+    koordinator_proyek?: number[];
+    wali_kelas?: number[];
+};
 
 export interface Auth {
     user: model.User & {
-        roles?: roles[];
+        roles?: Roles[];
+        guru?: RoleGuru;
+        siswa?: model.Siswa;
     };
 }
 

@@ -1,5 +1,6 @@
 import { Avatar, Badge, buttonStyle, Card, DL, Link } from '@/components/ui';
 import AppLayout from '@/layouts/app-layout';
+import { IsAdmin } from '@/lib/middleware';
 import type { BreadcrumbItem } from '@/types';
 import { Head } from '@inertiajs/react';
 import { IconPencil } from 'hq-icons';
@@ -18,17 +19,17 @@ export default function Sekolah({ sekolah }: { sekolah: model.Sekolah }) {
                     <Card className="h-fit">
                         <Card.Content className="mt-6 flex flex-col items-center gap-2">
                             <Avatar shape="square" className="outline-hidden" size="5xl" src={sekolah.logo || ''} alt={sekolah.nama} />
-                            <div className="my-2 flex flex-wrap items-center justify-center gap-1 text-sm">
-                                <Badge variant="danger">{sekolah.nama}</Badge>
+                            <div className="my-2 flex flex-wrap items-center justify-center gap-1 text-center text-sm font-semibold">
+                                {sekolah.nama}
                             </div>
                         </Card.Content>
                     </Card>
                     <Card className="h-fit">
                         <Card.Content className="mt-6 flex flex-col items-center gap-2">
-                            <h3 className="text-lg font-semibold tracking-tight">Kepala Sekolah</h3>
+                            <h3 className="text-center text-lg font-semibold tracking-tight">Kepala Sekolah</h3>
                             <Avatar shape="square" size="5xl" src={sekolah.kepsek.avatar || ''} alt={sekolah.kepsek.nama} />
                             <div className="my-2 flex flex-wrap items-center justify-center gap-1 text-sm">
-                                <Link href={route('guru.show', sekolah.kepsek.id)}>
+                                <Link href={IsAdmin() ? route('guru.show', sekolah.kepsek.id) : '#'}>
                                     <Badge variant="danger">{sekolah.kepsek.nama}</Badge>
                                 </Link>
                             </div>
@@ -39,12 +40,14 @@ export default function Sekolah({ sekolah }: { sekolah: model.Sekolah }) {
                     <Card.Header>
                         <Card.Title>Sekolah</Card.Title>
                         <Card.Description>Berikut adalah data lengkap sekolah</Card.Description>
-                        <Card.Action>
-                            <Link className={buttonStyle({ variant: 'outline' })} href={route('sekolah.edit', 1)}>
-                                <IconPencil />
-                                Edit
-                            </Link>
-                        </Card.Action>
+                        {IsAdmin() && (
+                            <Card.Action>
+                                <Link className={buttonStyle({ variant: 'outline' })} href={route('sekolah.edit', 1)}>
+                                    <IconPencil />
+                                    Edit
+                                </Link>
+                            </Card.Action>
+                        )}
                     </Card.Header>
                     <Card.Content>
                         <DL>

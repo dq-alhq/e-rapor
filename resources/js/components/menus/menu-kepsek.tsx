@@ -5,6 +5,7 @@ import {
     IconBookCopy,
     IconBoxes,
     IconCalendarDays,
+    IconCalendarTime,
     IconClipboardList,
     IconLayoutPanelTop,
     IconListChecks,
@@ -41,6 +42,11 @@ const masterDataMenu: NavItem[] = [
         title: 'Ekstrakurikuler',
         href: route('ekskul.index'),
         icon: IconBoxes,
+    },
+    {
+        title: 'Jadwal Pembelajaran',
+        href: route('jadwal.index'),
+        icon: IconCalendarTime,
     },
 ];
 

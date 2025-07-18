@@ -26,16 +26,24 @@ Route::middleware('auth')->group(function () {
             return inertia('dashboard');
         })->name('dashboard');
     });
+
+    Route::resource('sekolah', Controllers\Kepsek\SekolahController::class)->only('index');
+    Route::resource('kelas', Controllers\Kepsek\KelasController::class)->only('index', 'show');
+    Route::resource('mapel', Controllers\Kepsek\MapelController::class)->only('index', 'show');
+
+    Route::resource('jadwal', Controllers\JadwalController::class)->only('index', 'show');
+
 });
 
 Route::middleware(['auth', 'operator'])->group(function () {
+    Route::resource('kelas', Controllers\Kepsek\KelasController::class)->except('index', 'show');
+    Route::resource('mapel', Controllers\Kepsek\MapelController::class)->except('index', 'show');
+
     Route::inertia('kepsek', 'kepsek')->name('kepsek');
-    Route::resource('sekolah', Controllers\Kepsek\SekolahController::class);
+    Route::resource('sekolah', Controllers\Kepsek\SekolahController::class)->except('index');
     Route::resource('tapel', Controllers\Kepsek\TapelController::class);
     Route::put('tapel/{tapel}/aktif', [Controllers\Kepsek\TapelController::class, 'aktif'])->name('tapel.aktif');
-    Route::resource('mapel', Controllers\Kepsek\MapelController::class);
 
-    Route::resource('kelas', Controllers\Kepsek\KelasController::class);
     Route::get('/kelas-siswa/{kelas}', [Controllers\Kepsek\KelasController::class, 'anggota_kelas'])->name('kelas.anggota_kelas');
     Route::put('/kelas-siswa/{kelas}', [Controllers\Kepsek\KelasController::class, 'update_anggota_kelas']);
 
@@ -53,6 +61,9 @@ Route::middleware(['auth', 'operator'])->group(function () {
     Route::resource('operator', Controllers\Kepsek\OperatorController::class);
     Route::resource('proyek', Controllers\Kepsek\ProyekController::class);
     Route::resource('penilaian', Controllers\Kepsek\PenilaianController::class);
+
+    Route::resource('jadwal', Controllers\JadwalController::class)->except('index', 'show');
+
 });
 
 Route::get('cek-session', function (Request $request) {

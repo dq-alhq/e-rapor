@@ -514,5 +514,23 @@ declare global {
             siswa_exists: boolean;
             operator_exists: boolean;
         }
+
+        export interface Jadwal {
+            // columns
+            id: number;
+            tapel_id: number;
+            pembelajaran_id: number | null;
+            hari: string;
+            jam: number;
+            created_at: string | null;
+            updated_at: string | null;
+            // relations
+            pembelajaran: Pembelajaran;
+            tapel: Tapel;
+            // counts
+            // exists
+            pembelajaran_exists: boolean;
+            tapel_exists: boolean;
+        }
     }
 }

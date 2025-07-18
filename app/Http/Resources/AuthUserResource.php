@@ -23,6 +23,8 @@ class AuthUserResource extends JsonResource
             'email' => $this->email,
             'avatar' => $this->avatar ? route('image', $this->avatar) : null,
             'roles' => $this->getRoles(),
+            'guru' => $this->guru ? AuthGuruResource::make($this->guru) : null,
+            'siswa' => $this->siswa ? AuthSiswaResource::make($this->siswa) : null
         ];
     }
 }

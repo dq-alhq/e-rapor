@@ -209,7 +209,6 @@ if (!function_exists('opsiAngkatan')) {
     }
 }
 
-
 if (!function_exists('hapusFile')) {
     function hapusFile(string $path): int
     {
@@ -218,3 +217,18 @@ if (!function_exists('hapusFile')) {
 }
 
 
+if (!function_exists('cekAksesKelas')) {
+    function cekAksesKelas(\App\Models\Kelas $kelas): void
+    {
+        $authorize = auth()->user()->isOperator() || auth()->user()->guru->isMengajarKelas($kelas);
+        abort_if(!$authorize, 403, 'Anda tidak memiliki akses untuk Kelas ini.');
+    }
+}
+
+if (!function_exists('cekAksesMapel')) {
+    function cekAksesMapel(\App\Models\Mapel $mapel): void
+    {
+        $authorize = auth()->user()->isOperator() || auth()->user()->guru->isMengajarMapel($mapel);
+        abort_if(!$authorize, 403, 'Anda tidak memiliki akses untuk Mapel ini.');
+    }
+}

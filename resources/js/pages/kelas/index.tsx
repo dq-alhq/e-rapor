@@ -2,16 +2,12 @@ import DataOptions from '@/components/data-options';
 import Paginator from '@/components/paginator';
 import { buttonStyle, Header, Link, Table } from '@/components/ui';
 import AppLayout from '@/layouts/app-layout';
+import { GuruKelas, IsAdmin } from '@/lib/middleware';
 import KelasForm from '@/pages/kelas/form';
 import type { BreadcrumbItem, FormSetting, Paginate } from '@/types';
 import { Head } from '@inertiajs/react';
 import { IconDiamondPlus } from 'hq-icons';
 import { useState } from 'react';
-
-const breadcrumbs: BreadcrumbItem[] = [
-    { title: 'Dashboard', href: '/' },
-    { title: 'Data Kelas', href: '/tapel' },
-];
 
 interface Props {
     kelas: Paginate & { data: model.Kelas[] };
@@ -31,12 +27,14 @@ export default function Kelas({ kelas, tapel_aktif, form }: Props) {
                     <Header.Description>
                         Pada Tahun Pelajaran {tapel_aktif.tahun}/{tapel_aktif.tahun + 1} Semester {tapel_aktif.semester}
                     </Header.Description>
-                    <Header.Action>
-                        <Link href={route('kelas.create')} className={buttonStyle({ size: 'sm' })}>
-                            <IconDiamondPlus />
-                            Tambah Kelas
-                        </Link>
-                    </Header.Action>
+                    {IsAdmin() && (
+                        <Header.Action>
+                            <Link href={route('kelas.create')} className={buttonStyle({ size: 'sm' })}>
+                                <IconDiamondPlus />
+                                Tambah Kelas
+                            </Link>
+                        </Header.Action>
+                    )}
                 </Header>
                 <DataOptions attributes={attributes} />
                 <Table aria-label="Data Mapel">
@@ -50,15 +48,18 @@ export default function Kelas({ kelas, tapel_aktif, form }: Props) {
                         <Table.Column>Wali kelas</Table.Column>
                     </Table.Header>
                     <Table.Body>
-                        {data?.map((kelas, index) => (
-                            <Table.Row href={route('kelas.show', kelas.id)} key={kelas.id}>
-                                <Table.Cell>{meta.from + index}</Table.Cell>
-                                <Table.Cell>{kelas.nama}</Table.Cell>
-                                <Table.Cell>{kelas.tingkat}</Table.Cell>
-                                <Table.Cell>{kelas.siswa_count}</Table.Cell>
-                                <Table.Cell>{kelas.wali.nama}</Table.Cell>
-                            </Table.Row>
-                        ))}
+                        {data?.map(
+                            (kelas, index) =>
+                                GuruKelas(kelas.id) && (
+                                    <Table.Row href={route('kelas.show', kelas.id)} key={kelas.id}>
+                                        <Table.Cell>{meta.from + index}</Table.Cell>
+                                        <Table.Cell>{kelas.nama}</Table.Cell>
+                                        <Table.Cell>{kelas.tingkat}</Table.Cell>
+                                        <Table.Cell>{kelas.siswa_count}</Table.Cell>
+                                        <Table.Cell>{kelas.wali.nama}</Table.Cell>
+                                    </Table.Row>
+                                ),
+                        )}
                     </Table.Body>
                 </Table>
                 <Paginator meta={meta} links={links} only={['kelas']} />
@@ -68,4 +69,8 @@ export default function Kelas({ kelas, tapel_aktif, form }: Props) {
     );
 }
 
+const breadcrumbs: BreadcrumbItem[] = [
+    { title: 'Dashboard', href: '/' },
+    { title: 'Data Kelas', href: '/tapel' },
+];
 Kelas.layout = (page: React.ReactNode) => <AppLayout children={page} breadcrumbs={breadcrumbs} />;
