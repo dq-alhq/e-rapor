@@ -11,6 +11,7 @@ import { MenuSiswa } from '@/components/menus/menu-siswa';
 import { MenuWaliKelas } from '@/components/menus/menu-wali-kelas';
 import { NavUser } from '@/components/nav-user';
 import { Link, Sidebar, SidebarInset, SidebarNav } from '@/components/ui';
+import { Is, IsAdmin } from '@/lib/middleware';
 import type { BreadcrumbItem, SharedData } from '@/types';
 import { usePage } from '@inertiajs/react';
 
@@ -39,8 +40,7 @@ export function AppSidebar({ variant, children, breadcrumbs }: AppSidebarProps) 
                 </Sidebar.Header>
 
                 <Sidebar.Content className="no-scrollbar max-h-[80vh] flex-1 overflow-y-auto">
-                    {(user.roles?.includes('Kepala Sekolah') || user.roles?.includes('Operator')) && <MenuKepsek pathname={pathname} />}
-                    {user.roles?.includes('Guru') && <MenuGuru pathname={pathname} />}
+                    {IsAdmin() ? <MenuKepsek pathname={pathname} /> : Is('Guru') ? <MenuGuru pathname={pathname} /> : null}
                     {user.roles?.includes('Wali Kelas') && <MenuWaliKelas pathname={pathname} />}
                     {user.roles?.includes('Pembina Ekskul') && <MenuEkskul pathname={pathname} />}
                     {user.roles?.includes('Koordinator Proyek') && <MenuProyek pathname={pathname} />}

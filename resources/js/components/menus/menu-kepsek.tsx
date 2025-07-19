@@ -123,22 +123,22 @@ export const MenuKepsek = ({ pathname }: { pathname: string }) => {
                     </Sidebar.Item>
                 ))}
             </Sidebar.Section>
-            <Sidebar.Section title="Pembelajaran">
-                {pembelajaranMenu.map((item) => (
-                    <Sidebar.Item key={item.title} href={item.href} isCurrent={pathname.startsWith(item.href)}>
-                        {item.icon && <item.icon />}
-                        <Sidebar.Label>{item.title}</Sidebar.Label>
-                    </Sidebar.Item>
-                ))}
-            </Sidebar.Section>
-            <Sidebar.Section title="Proyek P5">
-                {proyekMenu.map((item) => (
-                    <Sidebar.Item key={item.title} href={item.href} isCurrent={pathname.startsWith(item.href)}>
-                        {item.icon && <item.icon />}
-                        <Sidebar.Label>{item.title}</Sidebar.Label>
-                    </Sidebar.Item>
-                ))}
-            </Sidebar.Section>
+            {/*<Sidebar.Section title="Pembelajaran">*/}
+            {/*    {pembelajaranMenu.map((item) => (*/}
+            {/*        <Sidebar.Item key={item.title} href={item.href} isCurrent={pathname.startsWith(item.href)}>*/}
+            {/*            {item.icon && <item.icon />}*/}
+            {/*            <Sidebar.Label>{item.title}</Sidebar.Label>*/}
+            {/*        </Sidebar.Item>*/}
+            {/*    ))}*/}
+            {/*</Sidebar.Section>*/}
+            {/*<Sidebar.Section title="Proyek P5">*/}
+            {/*    {proyekMenu.map((item) => (*/}
+            {/*        <Sidebar.Item key={item.title} href={item.href} isCurrent={pathname.startsWith(item.href)}>*/}
+            {/*            {item.icon && <item.icon />}*/}
+            {/*            <Sidebar.Label>{item.title}</Sidebar.Label>*/}
+            {/*        </Sidebar.Item>*/}
+            {/*    ))}*/}
+            {/*</Sidebar.Section>*/}
         </>
     );
 };
